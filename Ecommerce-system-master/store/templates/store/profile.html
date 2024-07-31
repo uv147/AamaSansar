@@ -1,0 +1,117 @@
+{% extends '_frontend.html' %}
+
+{% block title %}{{ request.user.username }} | Profile{% endblock %}
+
+{% block frontend_content %}
+    <div class="container-fluid pt-2">
+        <main class="main">
+            <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
+                <div class="container d-flex align-items-center">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'frontpage' %}">Home</a></li>
+                        <li class="breadcrumb-item">{{ request.user.username }}</li>
+                        <li class="breadcrumb-item active" aria-current="page">Profile Detail</li>
+                    </ol>
+                </div><!-- End .container -->
+            </nav><!-- End .breadcrumb-nav -->
+
+            <div class="page-content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="row pt-1">
+                                <h4>Profile Detail</h4>
+                            </div>
+                            <div class="row">
+                                <table class="table-responsive table-summary">
+                                    <tr>
+                                        <th>UserName</th>
+                                        <td>{{ profile.user.username }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>First Name</th>
+                                        <td>{{ profile.first_name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Last Name</th>
+                                        <td>{{ profile.last_name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Address</th>
+                                        <td>{{ profile.address }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Mobile Number</th>
+                                        <td>{{ profile.mobileNo }}</td>
+                                    </tr>
+                                </table>
+                                <div>
+                                    {% if profile %}<a type="button" class="btn btn-primary"
+                                                       href="{% url 'update_profile' username=request.user.username pk=profile.id %}">Update
+                                        Profile</a>
+                                    {% else %}
+                                        <a type="button" class="btn btn-primary"
+                                           href="{% url 'add_profile' request.user.id %}">Add
+                                            Profile</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4">
+                            <div class="row">
+                                <h4 class="pt-1">Profile Photo</h4>
+                            </div>
+                            <div class="row">
+                                {% if profile.photo %}
+                                    <img alt="{{ profile.user.username }}" src="{{ profile.photo.url }}"
+                                         class="rounded-pill mx-auto d-block"
+                                         height="50%" width="50%">
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+                    {% if order_items %}
+                        <div class="row" style="background-color: #e7efed">
+                            <div class="p-2">
+                                <h3>Order and Tracking Detail</h3>
+                            </div>
+                            <div class="p-3 table-responsive">
+                                <table style="border: 1px solid; width: 100%;  border-collapse: collapse; background-color:#e9ebef; text-align: center">
+                                    <thead>
+                                    <tr class="text-dark" style="border: 1px solid;">
+                                        <th>S.N</th>
+                                        <th>Product Name</th>
+                                        <th>Tracking</th>
+                                        <th>Quantity</th>
+                                        <th>Price</th>
+                                        <th>Order Date</th>
+                                        <th>Image</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for order_item in order_items %}
+                                        <tr style="border: 1px solid; text-size-adjust: auto">
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>{{ order_item.product.title }}</td>
+                                            <td>{{ order_item.tracking_status }}</td>
+                                            <td>{{ order_item.quantity }}</td>
+                                            <td>{{ order_item.price }}</td>
+                                            <td>{{ order_item.created_at|date:"D d M Y" }}</td>
+                                            <td><img alt="{{ order_item.product.title }}"
+                                                     src="{{ order_item.product.image.url }}"
+                                                     class="rounded mx-auto d-block"
+                                                     height="50" width="100"></td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </main>
+    </div>
+{% endblock %}

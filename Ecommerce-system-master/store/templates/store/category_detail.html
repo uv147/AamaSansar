@@ -1,0 +1,66 @@
+{% extends '_frontend.html' %}
+
+{% block title %}{{ category.title }}{% endblock %}
+{% load static %}
+{% load average_rating %}
+{% block frontend_content %}
+    <div class="container-fluid pt-2">
+        <main class="main">
+            <div class="products">
+                <div class="row">
+                    <!-- Product List -->
+                    {% for product in  products %}
+                        <div class="col-6 col-md-4 col-lg-4 col-xl-3">
+                            <div class="product">
+                                <figure class="product-media">
+                                    {% if product.image %}
+                                        <a href="{% url 'product_detail' product.category.slug product.slug %}">
+                                            <img src="{{ product.image.url }}" alt="Image of {{ product.title }}"
+                                                 class="product-image">
+                                        </a>
+                                    {% endif %}
+
+                                    {#                                    <div class="product-action-vertical">#}
+                                    {#                                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>#}
+                                    {#                                    </div><!-- End .product-action -->#}
+
+                                    <div class="product-action action-icon-top">
+                                        {% if not request.user.is_superuser and not request.user.is_vendor %}
+                                            <a href="{% url 'add_to_cart' product.id %}"
+                                               class="btn-product btn-cart"><span>add to cart</span></a>
+                                        {% endif %}
+                                        <a href="popup/quickView.html" class="btn-product btn-quickview"
+                                           title="Quick view"><span>quick view</span></a>
+                                        {#                                        <a href="#" class="btn-product btn-compare" title="Compare"><span>compare</span></a>#}
+                                    </div><!-- End .product-action -->
+                                </figure><!-- End .product-media -->
+
+                                <div class="product-body">
+                                    <div class="product-cat">
+                                        <a href="{% url 'category_detail' product.category.slug %}">{{ product.category.title }}</a>
+                                    </div><!-- End .product-cat -->
+                                    <h3 class="product-title"><a
+                                            href="{% url 'product_detail' product.category.slug product.slug %}">
+                                        {{ product.title }}</a></h3>
+                                    <!-- End .product-title -->
+                                    <div class="product-price">
+                                        Rs. {{ product.price }}                                    </div>
+                                    <!-- End .product-price -->
+                                    <div class="ratings-container">
+                                        <div class="ratings">
+                                            <div class="ratings-val" style="width: {{ product|avg_rating }}%;"></div><!-- End .ratings-val -->
+                                        </div><!-- End .ratings -->
+                                        <span class="ratings-text">( {{ product|review_count }} Reviews )</span>
+                                    </div><!-- End .rating-container -->
+
+
+                                </div><!-- End .product-body -->
+                            </div><!-- End .product -->
+                        </div><!-- End .col-sm-6 col-lg-4 col-xl-3 -->
+                    {% endfor %}
+                </div><!-- End .row -->
+
+            </div><!-- End .products -->
+        </main>
+    </div>
+{% endblock %}

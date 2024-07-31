@@ -1,0 +1,151 @@
+{% extends '_frontend.html' %}
+{% load static %}
+{% load index_value %}
+{% load average_rating %}
+
+{% block frontend_content %}
+    <main class="main">
+        <div class="intro-section pt-3 pb-3 mb-2">
+            <div class="container">
+                <div class="row">
+                    <!-- Slider -->
+                    <div class="col-lg-8">
+                        <div class="intro-slider-container slider-container-ratio mb-2 mb-lg-0">
+                            <div class="intro-slider owl-carousel owl-simple owl-dark owl-nav-inside" data-toggle="owl"
+                                 data-owl-options='{
+                                        "nav": false,
+                                        "dots": true,
+                                        "loop":true,
+                                        "responsive": {
+                                            "768": {
+                                                "nav": true,
+                                                "dots": false
+                                            }
+                                        }
+                                    }'>
+                                {% for banner in banners %}
+                                    <div class="intro-slide">
+                                        <figure class="slide-image">
+                                            <picture>
+                                                <source media="(max-width: 480px)"
+                                                        srcset="{{ banner.image.url }}">
+                                                <img src="{{ banner.image.url }}" alt="{{ banner.title }}">
+                                            </picture>
+                                        </figure><!-- End .slide-image -->
+                                    </div><!-- End .intro-slide -->
+                                {% endfor %}
+                            </div><!-- End .intro-slider owl-carousel owl-simple -->
+
+                            <span class="slider-loader"></span><!-- End .slider-loader -->
+                        </div><!-- End .intro-slider-container -->
+                    </div><!-- End .col-lg-8 -->
+                    <!-- Popular Products -->
+                    <div class="col-lg-4">
+                        <h4>Popular Product</h4>
+                        <div class="intro-banners">
+                            {% for popular_product in popular_products %}
+                                <div class="banner mb-lg-1 mb-xl-2">
+                                    <div class="row">
+                                        <div class="col-8">
+                                            <div class="banner-content">
+                                                <!-- End .banner-subtitle -->
+                                                <h4 class="banner-subtitle d-lg-none d-xl-block">{{ popular_product.category.title }}
+                                                </h4><!-- End .banner-subtitle -->
+                                                <h3 class="banner-title"><a
+                                                        href="{% url 'product_detail' popular_product.category.slug popular_product.slug %}">{{ popular_product.title|truncatewords:5 }}</a>
+                                                </h3>
+                                                <!-- End .banner-title -->
+                                                <a href="{% url 'product_detail' popular_product.category.slug popular_product.slug %}"
+                                                   class="banner-link">Shop Now<i
+                                                        class="icon-long-arrow-right"></i></a>
+                                            </div><!-- End .banner-content -->
+                                        </div>
+                                        <div class="col-4">
+                                            <a href="{% url 'product_detail' popular_product.category.slug popular_product.slug %}">
+                                                <img src="{{ popular_product.image.url }}"
+                                                     alt="Image of {{ popular_product.title }}">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div><!-- End .banner -->
+                            {% endfor %}
+                        </div><!-- End .intro-banners -->
+
+                    </div><!-- End .col-lg-4 -->
+                </div><!-- End .row -->
+            </div><!-- End .container -->
+        </div><!-- End .intro-section -->
+
+        <hr>
+        {#        <div class="container top">#}
+        {#            <div class="heading heading-flex mb-3">#}
+        {#                <div class="heading-left">#}
+        {#                    <h2 class="title"></h2><!-- End .title -->#}
+        {#                </div><!-- End .heading-left -->#}
+        {##}
+        {#            </div><!-- End .heading -->#}
+
+        <div class="products">
+            <div class="row">
+                <!-- Product List -->
+                {% for product in  products %}
+                    <div class="col-6 col-md-4 col-lg-4 col-xl-3">
+                        <div class="product">
+                            <figure class="product-media">
+                                {% if product.image %}
+                                    <a href="{% url 'product_detail' product.category.slug product.slug %}">
+                                        <img src="{{ product.image.url }}" alt="Image of {{ product.title }}"
+                                             class="product-image">
+                                    </a>
+                                {% endif %}
+
+                                {#                                    <div class="product-action-vertical">#}
+                                {#                                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>#}
+                                {#                                    </div><!-- End .product-action -->#}
+
+                                <div class="product-action action-icon-top">
+                                    {% if not request.user.is_superuser and not request.user.is_vendor %}
+                                        <a href="{% url 'add_to_cart' product.id %}"
+                                           class="btn-product btn-cart"><span>add to cart</span></a>
+                                    {% endif %}
+                                    <a href="popup/quickView.html" class="btn-product btn-quickview"
+                                       title="Quick view"><span>quick view</span></a>
+                                    {#                                        <a href="#" class="btn-product btn-compare" title="Compare"><span>compare</span></a>#}
+                                </div><!-- End .product-action -->
+                            </figure><!-- End .product-media -->
+
+                            <div class="product-body">
+                                <div class="product-cat">
+                                    <a href="{% url 'category_detail' product.category.slug %}">{{ product.category.title }}</a>
+                                </div><!-- End .product-cat -->
+                                <h3 class="product-title"><a
+                                        href="{% url 'product_detail' product.category.slug product.slug %}">
+                                    {{ product.title }}</a></h3>
+                                <!-- End .product-title -->
+                                <div class="product-price">
+                                    Rs. {{ product.price }}                                    </div>
+                                <!-- End .product-price -->
+                                <div class="ratings-container">
+                                    <div class="ratings">
+                                        <div class="ratings-val" style="width: {{ product|avg_rating }}%;"></div><!-- End .ratings-val -->
+                                    </div><!-- End .ratings -->
+                                    <span class="ratings-text">( {{ product|review_count }} Reviews )</span>
+                                </div><!-- End .rating-container -->
+
+
+                            </div><!-- End .product-body -->
+                        </div><!-- End .product -->
+                    </div><!-- End .col-sm-6 col-lg-4 col-xl-3 -->
+                {% endfor %}
+            </div><!-- End .row -->
+
+            <div class="load-more-container text-center">
+                <a href="{% url 'product_list' %}" class="btn btn-outline-darker btn-load-more">More Products <i
+                        class="icon-refresh"></i></a>
+            </div><!-- End .load-more-container -->
+        </div><!-- End .products -->
+        </div>
+    </main><!-- End .main -->
+
+
+{% endblock %}

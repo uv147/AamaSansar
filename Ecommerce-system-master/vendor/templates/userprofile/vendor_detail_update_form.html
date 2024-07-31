@@ -1,0 +1,53 @@
+{% extends 'core/base.html' %}
+{% block title %} {% firstof user.get_full_name user.username %}
+{% endblock %}
+
+{% block content %}
+    <div class="flex flex-wrap">
+        <form method="post" enctype="multipart/form-data"
+              action="{% url 'seller_profile_update' request.user.id vendordetail.id %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="company_name">Company Name</label>
+                <input type="text" class="form-control" id="company_name" name="company_name" placeholder="ABC Pvt.ltd"
+                       readonly>
+            </div>
+            <div class="form-row">
+
+                <div class="form-group col-md-6">
+                    <label for="company_address">Company Address</label>
+                    <input type="text" class="form-control" id="company_address" name="company_address"
+                           value="{{ vendordetail.company_address }}" placeholder="Kathmandu">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="company_phone">Phone Number</label>
+                    <input type="number" class="form-control" id="company_phone" name="company_phone"
+                           value="{{ vendordetail.company_phone }}"
+                           placeholder="9800000000">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="pan_vat_no">Pan/Vat Number</label>
+                <input type="number" class="form-control" id="pan_vat_no" name="pan_vat_no" placeholder="35676532"
+                       readonly>
+            </div>
+            <div class="form-group">
+                <label for="company_registered_document">Company Registered Document</label>
+                <input type="file" class="form-control" id="company_registered_document"
+                       name="company_registered_document" value="{{ vendordetail.company_registered_document }}"
+                       accept=".png,.jpg,.jpeg">
+                {% if vendordetail.company_registered_document %}
+                    <img src="{{ vendordetail.company_registered_document.url }}" width="30%" height="30%">
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <label for="pan_vat_registered_document">Pan/Vat Registered Document</label>
+                <img src="{{ vendordetail.pan_vat_registered_document.url }}" width="50%" height="50%"></div>
+            <input type="hidden" class="form-control" id="validationDefault01"
+                   name="vendor" value="{{ request.user.id }}">
+
+            <button type="submit" class="btn btn-primary bg-secondary">Update Detail</button>
+        </form>
+    </div>
+{% endblock %}

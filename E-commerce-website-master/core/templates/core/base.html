@@ -1,0 +1,132 @@
+{% load menu %}
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{% endblock %} | AamaSansar</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#" h1>
+            AamaSansar</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+       <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="search" aria-label="search" rounded-xl>
+        <button>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-white">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+              </svg>
+        </button>
+       </form>
+            
+    </div>
+
+        
+            {% menu %}
+            <div class="flex items-center space-x-1 ms-auto mb-2 mb-lg-0">
+            <a href="{% url 'cart_view' %}"class="flex space-x-3 py-2 px-4  rounded-xl text-white hover:bg-teal-900 ml-auto">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+                  </svg>
+                  <span>({{ cart|length }})</span> </a>
+
+                  <class="nav-item dropdown">
+                    <a href="" class="rounded-xl text-white hover:bg-teal-900 nav-link dropdown-toggle" data-toggle="dropdown">
+                      Categories
+                    </a>
+                    <div class="dropdown-menu">
+                      <a href="" class="dropdown-item">Mom clothing</a>
+                      <a href="" class="dropdown-item">Baby clothing</a>
+                      <a href="" class="dropdown-item">Baby Skincare</a>
+                    </div>
+                  </class>
+                    <class="nav-item dropdown">
+                    <a href="" class="rounded-xl text-white hover:bg-teal-900 nav-link dropdown-toggle" data-toggle="dropdown">
+                      My Account
+                    </a>
+                    <div class="dropdown-menu">
+                      <a href="" class="dropdown-item">Login</a>
+                      <a href="" class="dropdown-item">Register</a>
+                      <a href="" class="dropdown-item">Seller</a>
+                    </div>
+                  </class>
+    </nav>
+ <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+      
+   
+  {% block content %} 
+    
+  {% endblock %}
+ 
+    <div class="max-w-9xl mx-auto py-5 px-1">
+        <footer class="bg-green-800 text-white pt-5 pb-4">
+         <div class="container text-centre text-md-left">
+            <div class="row text-centre text-md-left">
+                <div class="col-md-4 col-lg-3 col-xl-3 mx-auto-mt-3">
+                    <h5 class="text-uppercase mb-4 font-weight-bold text warning">Aama Sansar</h5>
+                    <p>Aama Sansar is one click online store where you can get various maternal and baby products.</p>
+                </div>
+                <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-1">
+                    <h5 class="text-uppercase mb-4 font-weight-bold text warning">products</h5>
+                    <p>
+                    <a href="#" class="text-white" style="text-decoration:none;">Mom's clothing</a>
+                    </p>
+                    <p>
+                    <a href="#" class="text-white" style="text-decoration:none;">Baby Clothing</a>
+                    </p>
+                    <p>
+                        <a href="#" class="text-white" style="text-decoration:none;">Baby skincare</a>
+                    </p>
+                </div>
+                <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-1">
+                    <h5 class="text-uppercase mb-4 font-weight-bold text warning">useful links</h5>
+                    <p>
+                    <a href="#" class="text-white" style="text-decoration:none;">Home</a>
+                    </p>
+                    <p>
+                    <a href="#" class="text-white" style="text-decoration:none;">products</a>
+                </p>
+                <p>
+                <a href="#" class="text-white" style="text-decoration:none;">products</a>
+                </p>
+                <p>
+                    <a href="#" class="text-white" style="text-decoration:none;">Cart</a>
+                </p>
+            </div>
+            <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-1">
+                <h5 class="text-uppercase mb-4 font-weight-bold text warning">Contact</h5>
+                <p>
+                    <i class="fas fa-home mr-3"></i>Kathmandu,Nepal
+                </p>
+                <p>
+                    <i class="fas fa-envelope mr-3"></i>@aamasansar@gmail.com
+                </p>
+                <p>
+                    <i class="fas fa-phone mr-3"></i>9863820649
+                </p>
+
+            </div>
+        </div>
+        <hr class="mb-4">
+        <div class="row allign-items-centre">
+            <div class="col-md-7 col-lg-8">
+                <p> Copyright ©2023 All rights reserved by:
+                    <a href="#" style="text-decoration:none;">
+                        <strong class="text-warning">Aama Sansar</strong>
+                    </a></p>
+                </div>
+            </div>
+
+</body>
+</html>

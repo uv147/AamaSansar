@@ -1,0 +1,29 @@
+body{
+    background-image: url('../image/istockphoto-1202695612-612x612.jpg');
+    background-repeat:no-repeat;
+    background-size: 100%;
+}
+p{
+    color:rgb(49, 9, 9);
+    text-align: center;
+    font-size: medium;
+}
+.container{
+    width: 400px;
+    height: 450px;
+    margin:70px auto 0;
+    
+    background:rgba(187, 127, 74, 0.103);
+    
+    border:3px solid rgba(61, 92, 122, 0.521);
+    border-radius: 70px 0;
+
+}
+h3{
+    font-size:xx-large;
+    font-weight: bold;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-style:normal;
+    font-stretch: expanded;
+    text-decoration:underline;
+}

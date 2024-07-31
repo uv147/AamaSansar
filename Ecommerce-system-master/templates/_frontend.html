@@ -1,0 +1,510 @@
+{% load static %}
+{% load menu %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>{{ about.title }} - Index</title>
+    <!-- Plugins CSS File -->
+    <link rel="stylesheet" href="{% static 'dashboard/vendor/fontawesome-free/css/all.min.css' %}">
+
+    <link rel="stylesheet" href="{% static 'frontend/assets/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'frontend/assets/css/plugins/owl-carousel/owl.carousel.css' %}">
+    <link rel="stylesheet" href="{% static 'frontend/assets/css/plugins/magnific-popup/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'frontend/assets/css/plugins/jquery.countdown.css' %}">
+    <!-- Main CSS File -->
+    <link rel="stylesheet" href="{% static 'frontend/assets/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'frontend/assets/css/skins/skin-demo-3.css' %}">
+    <link rel="stylesheet" href="{% static 'frontend/assets/css/demos/demo-3.css' %}">
+    <script src="https://khalti.s3.ap-south-1.amazonaws.com/KPG/dist/2020.12.17.0.0.0/khalti-checkout.iffe.js"></script>
+
+
+</head>
+
+<body>
+<div class="page-wrapper">
+    <header class="header header-intro-clearance header-3">
+        <div class="header-top">
+            <div class="container">
+                <div class="header-left">
+                    <a href="tel:#"><i class="icon-phone"></i>Call:  {{ about.phoneNo }}</a>
+                </div><!-- End .header-left -->
+
+                <div class="header-right">
+
+                    <ul class="top-menu">
+                        <li>
+                            {#                            <a href="#">Links</a>#}
+                            <ul>
+                                <li>
+                                    <a href="#">Chat with Us</a>
+                                </li>
+                                <li>|</li>
+                                <li>
+                                    <a href="#">Download Apps</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul><!-- End .top-menu -->
+                </div><!-- End .header-right -->
+
+            </div><!-- End .container -->
+        </div><!-- End .header-top -->
+
+        <div class="header-middle">
+            <div class="container">
+                <div class="header-left">
+                    <button class="mobile-menu-toggler">
+                        <span class="sr-only">Toggle mobile menu</span>
+                        <i class="icon-bars"></i>
+                    </button>
+
+                    <a href="{% url 'frontpage' %}" class="logo">
+                        <img src="{{ about.logo.url }}" alt="{{ about.title }}" width="20%" height="20">
+                    </a>
+                </div><!-- End .header-left -->
+                <div class="header-center">
+                    <div class="header-search header-search-extended header-search-visible d-none d-lg-block">
+                        <a href="#" class="search-toggle" role="button"><i class="icon-search"></i></a>
+                        <form action="{% url 'search' %}" method="get">
+                            {% csrf_token %}
+                            <div class="header-search-wrapper search-wrapper-wide">
+                                <label for="query" class="sr-only">Search</label>
+                                <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
+                                <input type="search" class="form-control" name="query" id="query"
+                                       placeholder="Search product ..." required>
+                            </div><!-- End .header-search-wrapper -->
+                        </form>
+                    </div><!-- End .header-search -->
+                </div>
+                <div class="header-right">
+                    {% if request.user.is_authenticated %}
+                        {% if not request.user.is_superuser and not request.user.is_vendor %}
+                            <div class="dropdown cart-dropdown">
+                                <a href="{% url 'cart_view' %}" class="dropdown-toggle button" role="button"
+                                   aria-haspopup="true"
+                                   aria-expanded="false">
+                                    <div class="icon">
+                                        <i class="icon-shopping-cart"></i>
+                                        <span class="cart-count">{{ cart|length }}</span>
+                                    </div>
+                                    <p class="text-white pt-2">Cart</p>
+                                </a>
+                            </div>
+                        {% endif %}
+
+                        <div class="dropdown cart-dropdown">
+                            {% if request.user.is_superuser %}
+                                <a href="{% url 'dashboard:admin_index' %}" class="button dropdown-toggle" role="button"
+                                   aria-haspopup="true"
+                                   aria-expanded="false">
+                                    <div class="icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+                                             fill="currentColor"
+                                             class="bi bi-box-arrow-in-right" viewBox="0 0 16 16">
+                                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                                            <path fill-rule="evenodd"
+                                                  d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                                        </svg>
+                                    </div>
+                                    <p class="text-white pt-2">{{ request.user.username }}</p>
+                                </a>
+                            {% elif request.user.is_vendor %}
+                                <a href="{% url 'seller' request.user.id %}" class="dropdown-toggle button"
+                                   role="button"
+                                   aria-haspopup="true"
+                                   aria-expanded="false">
+                                    <div class="icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+                                             fill="currentColor"
+                                             class="bi bi-box-arrow-in-right" viewBox="0 0 16 16">
+                                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                                            <path fill-rule="evenodd"
+                                                  d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                                        </svg>
+                                    </div>
+                                    <p class="text-white pt-2">{{ request.user.username }}</p>
+                                </a>
+                            {% else %}
+                                <a href="{% url 'frontpage' %}" class="dropdown-toggle button" role="button"
+                                   aria-haspopup="true"
+                                   aria-expanded="false">
+                                    <div class="icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+                                             fill="currentColor"
+                                             class="bi bi-box-arrow-in-right" viewBox="0 0 16 16">
+                                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                                            <path fill-rule="evenodd"
+                                                  d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                                        </svg>
+                                    </div>
+                                    <p class="text-white pt-2">{{ request.user.username }}</p>
+                                </a>
+                            {% endif %}
+
+                            <ul class="dropdown-menu p-0" aria-labelledby="dropdownMenuButton">
+                                {#                                {% if request.user.is_superuser or request.user.is_vendor %}#}
+                                {#                                    <li>#}
+                                {#                                    <a class="dropdown-item bg-dark text-white" href="{% if request.user.is_superuser %}#}
+                                {#                                    {% url 'dashboard:admin_index' %}{% else %}{% url 'seller' request.user.id %}#}
+                                {#                                    {% endif %}">Home</a>#}
+                                {#                                {% endif %}#}
+                                <li><a class="dropdown-item bg-dark text-white" href="
+                                        {% if request.user.is_vendor %}{% url 'vendor_detail' request.user.id %}
+                                        {% elif request.user.is_superuser %}{% url 'dashboard:about_us' %}
+                                        {% else %}{% url 'profile' request.user.id %}{% endif %}">Profile</a>
+                                </li>
+                                <li><a class="dropdown-item bg-dark text-white" href="{% url 'logout' %}">Log Out</a>
+                                </li>
+                            </ul>
+                        </div>
+                    {% else %}
+                        <div class="dropdown cart-dropdown">
+                            <a href="{% url 'login' %}" class="dropdown-toggle" role="button" aria-haspopup="true"
+                               aria-expanded="false">
+                                <div class="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                                         class="bi bi-box-arrow-in-right" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd"
+                                              d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0v-2z"/>
+                                        <path fill-rule="evenodd"
+                                              d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+                                    </svg>
+                                </div>
+                                <p class="text-white">Login</p>
+                            </a>
+                        </div>
+                        <div class="dropdown cart-dropdown">
+                            <a href="{% url 'handlesellersignup' %}" class="dropdown-toggle" role="button"
+                               aria-haspopup="true"
+                               aria-expanded="false" data-display="static">
+                                <div class="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                                         class="bi bi-badge-vr" viewBox="0 0 16 16">
+                                        <path d="M14 3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h12zM2 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H2z"/>
+                                        <path d="M4.508 11h1.429l1.99-5.999H6.61L5.277 9.708H5.22L3.875 5.001H2.5L4.508 11zm6.387-5.999H8.5V11h1.173V8.763h1.064L11.787 11h1.327L11.91 8.583C12.455 8.373 13 7.779 13 6.9c0-1.147-.773-1.9-2.105-1.9zm-1.222 2.87V5.933h1.05c.63 0 1.05.347 1.05.989 0 .633-.408.95-1.067.95H9.673z"/>
+                                    </svg>
+                                </div>
+                                <p class="text-white">Vendor</p>
+                            </a>
+                        </div>
+                    {% endif %}
+
+                </div><!-- End .header-right -->
+            </div><!-- End .container -->
+        </div><!-- End .header-middle -->
+
+        <div class="header-bottom sticky-header">
+            <div class="container">
+                <div class="header-left">
+                    <div class="dropdown category-dropdown">
+                        <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown"
+                           aria-haspopup="true"
+                           aria-expanded="false" data-display="static" title="Browse Categories">
+                            Browse Categories <i class="icon-angle-down"></i>
+                        </a>
+
+                        <div class="dropdown-menu">
+                            <nav class="side-nav">
+                                <ul class="menu-vertical sf-arrows">
+                                    {% for category in categories %}
+                                        <li>
+                                            <a href="{% url 'category_detail' category.slug %}">{{ category.title }}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul><!-- End .menu-vertical -->
+                            </nav><!-- End .side-nav -->
+                        </div><!-- End .dropdown-menu -->
+                    </div><!-- End .category-dropdown -->
+                </div><!-- End .header-left -->
+
+                <div class="header-center">
+                    <nav class="main-nav">
+                        <ul class="menu sf-arrows">
+                            {% menu %}
+                        </ul><!-- End .menu -->
+                    </nav><!-- End .main-nav -->
+                </div><!-- End .header-center -->
+
+                {#                <div class="header-right">#}
+                {#                    <i class="la la-lightbulb-o"></i>#}
+                {#                    <p>Clearance<span class="highlight">&nbsp;Up to 30% Off</span></p>#}
+                {#                </div>#}
+            </div><!-- End .container -->
+        </div><!-- End .header-bottom -->
+    </header><!-- End .header -->
+
+    <!-- Begin Page Content -->
+    {% block frontend_content %}{% endblock %}
+    <!-- /.container-fluid -->
+
+    <footer class="footer bg-dark">
+        <div class="footer-middle">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="widget widget-about">
+                            <img src="{{ about.logo.url }}" class="footer-logo" alt="{{ about.title }}"
+                                 width="80%" height="50%">
+                            <p>{{ about.description | truncatewords:15 }}</p>
+
+                            <div class="widget-call">
+                                <i class="icon-phone"></i>
+                                Got Question? Call us 24/7
+                                <a class="text-light" href="tel:#">  {{ about.phoneNo }}</a>
+                            </div><!-- End .widget-call -->
+                        </div><!-- End .widget about-widget -->
+                    </div><!-- End .col-sm-6 col-lg-3 -->
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="widget">
+                            <h4 class="widget-title text-light">Useful Links</h4><!-- End .widget-title -->
+
+                            <ul class="widget-list">
+                                <li><a href="#">About AamaSansar</a></li>
+                                <li><a href="#">Our Services</a></li>
+                                <li><a href="#">How to shop on AamaSansar</a></li>
+
+                                <li><a href="#">Contact us</a></li>
+                            </ul><!-- End .widget-list -->
+                        </div><!-- End .widget -->
+                    </div><!-- End .col-sm-6 col-lg-3 -->
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="widget">
+                            <h4 class="widget-title text-light">Customer Service</h4><!-- End .widget-title -->
+
+                            <ul class="widget-list">
+                                <li><a href="#">Payment Methods</a></li>
+
+                                <li><a href="#">Returns</a></li>
+                                <li><a href="#">Shipping</a></li>
+                                <li><a href="#">Terms and conditions</a></li>
+                                <li><a href="#">Privacy Policy</a></li>
+                            </ul><!-- End .widget-list -->
+                        </div><!-- End .widget -->
+                    </div><!-- End .col-sm-6 col-lg-3 -->
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="widget">
+                            <h4 class="widget-title text-light">My Account</h4><!-- End .widget-title -->
+
+                            <ul class="widget-list">
+                                <li><a href="#">Sign In</a></li>
+                                <li><a href="#">View Cart</a></li>
+                                <li><a href="#">Track My Order</a></li>
+                                <li><a href="#">Vendor</a></li>
+                                <li><a href="#">Help</a></li>
+                            </ul><!-- End .widget-list -->
+                        </div><!-- End .widget -->
+                    </div><!-- End .col-sm-6 col-lg-3 -->
+                </div><!-- End .row -->
+            </div><!-- End .container -->
+        </div><!-- End .footer-middle -->
+
+        <div class="footer-bottom bg-dark">
+            <div class="container">
+                <p class="footer-copyright text-light">Copyright © 2022-{% now "Y" %} {{ about.title }}. All Rights
+                    Reserved.</p>
+                <!-- End .footer-copyright -->
+                <figure class="footer-payments">
+                    <img class="bg-white" src="{% static 'image/khalti.png' %}" alt="Payment methods" width="80"
+                         height="50">
+                </figure><!-- End .footer-payments -->
+            </div><!-- End .container -->
+        </div><!-- End .footer-bottom -->
+    </footer><!-- End .footer -->
+</div><!-- End .page-wrapper -->
+<button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu-overlay"></div><!-- End .mobil-menu-overlay -->
+
+<div class="mobile-menu-container">
+    <div class="mobile-menu-wrapper">
+        <span class="mobile-menu-close"><i class="icon-close"></i></span>
+
+        <form action="#" method="get" class="mobile-search">
+            <label for="mobile-search" class="sr-only">Search</label>
+            <input type="search" class="form-control" name="mobile-search" id="mobile-search" placeholder="Search in..."
+                   required>
+            <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
+        </form>
+
+        <ul class="nav nav-pills-mobile nav-border-anim" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="mobile-menu-link" data-toggle="tab" href="#mobile-menu-tab" role="tab"
+                   aria-controls="mobile-menu-tab" aria-selected="true">Menu</a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="mobile-menu-tab" role="tabpanel"
+                 aria-labelledby="mobile-menu-link">
+                <nav class="mobile-nav">
+                    <ul class="mobile-menu">
+                        {% for category in categories %}
+                            <li>
+                                <a href="{% url 'category_detail' category.slug %}">{{ category.title }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </nav><!-- End .mobile-nav -->
+            </div><!-- .End .tab-pane -->
+        </div><!-- End .tab-content -->
+
+        <div class="social-icons">
+            <a href="#" class="social-icon" target="_blank" title="Facebook"><i class="icon-facebook-f"></i></a>
+            <a href="#" class="social-icon" target="_blank" title="Twitter"><i class="icon-twitter"></i></a>
+            <a href="#" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
+            <a href="#" class="social-icon" target="_blank" title="Youtube"><i class="icon-youtube"></i></a>
+        </div><!-- End .social-icons -->
+    </div><!-- End .mobile-menu-wrapper -->
+</div><!-- End .mobile-menu-container -->
+
+<!-- Sign in / Register Modal -->
+<div class="modal fade" id="signin-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="icon-close"></i></span>
+                </button>
+
+                <div class="form-box">
+                    <div class="form-tab">
+                        <ul class="nav nav-pills nav-fill nav-border-anim" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="signin-tab" data-toggle="tab" href="#signin" role="tab"
+                                   aria-controls="signin" aria-selected="true">Sign In</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="register-tab" data-toggle="tab" href="#register" role="tab"
+                                   aria-controls="register" aria-selected="false">Register</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="tab-content-5">
+                            <div class="tab-pane fade show active" id="signin" role="tabpanel"
+                                 aria-labelledby="signin-tab">
+                                <form action="#">
+                                    <div class="form-group">
+                                        <label for="singin-email">Username or email address *</label>
+                                        <input type="text" class="form-control" id="singin-email" name="singin-email"
+                                               required>
+                                    </div><!-- End .form-group -->
+
+                                    <div class="form-group">
+                                        <label for="singin-password">Password *</label>
+                                        <input type="password" class="form-control" id="singin-password"
+                                               name="singin-password" required>
+                                    </div><!-- End .form-group -->
+
+                                    <div class="form-footer">
+                                        <button type="submit" class="btn btn-outline-primary-2">
+                                            <span>LOG IN</span>
+                                            <i class="icon-long-arrow-right"></i>
+                                        </button>
+
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="signin-remember">
+                                            <label class="custom-control-label" for="signin-remember">Remember
+                                                Me</label>
+                                        </div><!-- End .custom-checkbox -->
+
+                                        <a href="#" class="forgot-link">Forgot Your Password?</a>
+                                    </div><!-- End .form-footer -->
+                                </form>
+                                <div class="form-choice">
+                                    <p class="text-center">or sign in with</p>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <a href="#" class="btn btn-login btn-g">
+                                                <i class="icon-google"></i>
+                                                Login With Google
+                                            </a>
+                                        </div><!-- End .col-6 -->
+                                        <div class="col-sm-6">
+                                            <a href="#" class="btn btn-login btn-f">
+                                                <i class="icon-facebook-f"></i>
+                                                Login With Facebook
+                                            </a>
+                                        </div><!-- End .col-6 -->
+                                    </div><!-- End .row -->
+                                </div><!-- End .form-choice -->
+                            </div><!-- .End .tab-pane -->
+                            <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
+                                <form action="#">
+                                    <div class="form-group">
+                                        <label for="register-email">Your email address *</label>
+                                        <input type="email" class="form-control" id="register-email"
+                                               name="register-email" required>
+                                    </div><!-- End .form-group -->
+
+                                    <div class="form-group">
+                                        <label for="register-password">Password *</label>
+                                        <input type="password" class="form-control" id="register-password"
+                                               name="register-password" required>
+                                    </div><!-- End .form-group -->
+
+                                    <div class="form-footer">
+                                        <button type="submit" class="btn btn-outline-primary-2">
+                                            <span>SIGN UP</span>
+                                            <i class="icon-long-arrow-right"></i>
+                                        </button>
+
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="register-policy"
+                                                   required>
+                                            <label class="custom-control-label" for="register-policy">I agree to the <a
+                                                    href="#">privacy policy</a> *</label>
+                                        </div><!-- End .custom-checkbox -->
+                                    </div><!-- End .form-footer -->
+                                </form>
+                                <div class="form-choice">
+                                    <p class="text-center">or sign in with</p>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <a href="#" class="btn btn-login btn-g">
+                                                <i class="icon-google"></i>
+                                                Login With Google
+                                            </a>
+                                        </div><!-- End .col-6 -->
+                                        <div class="col-sm-6">
+                                            <a href="#" class="btn btn-login  btn-f">
+                                                <i class="icon-facebook-f"></i>
+                                                Login With Facebook
+                                            </a>
+                                        </div><!-- End .col-6 -->
+                                    </div><!-- End .row -->
+                                </div><!-- End .form-choice -->
+                            </div><!-- .End .tab-pane -->
+                        </div><!-- End .tab-content -->
+                    </div><!-- End .form-tab -->
+                </div><!-- End .form-box -->
+            </div><!-- End .modal-body -->
+        </div><!-- End .modal-content -->
+    </div><!-- End .modal-dialog -->
+</div><!-- End .modal -->
+
+<script src="{% static 'frontend/assets/js/jquery.min.js' %}"></script>
+<script src="{% static 'frontend/assets/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'frontend/assets/js/jquery.hoverIntent.min.js' %}"></script>
+<script src="{% static 'frontend/assets/js/jquery.waypoints.min.js' %}"></script>
+<script src="{% static 'frontend/assets/js/superfish.min.js' %}"></script>
+<script src="{% static 'frontend/assets/js/owl.carousel.min.js' %}"></script>
+<script src="{% static 'frontend/assets/js/bootstrap-input-spinner.js' %}"></script>
+<script src="{% static 'frontend/assets/js/jquery.plugin.min.js' %}"></script>
+<script src="{% static 'frontend/assets/js/jquery.magnific-popup.min.js' %}"></script>
+<script src="{% static 'frontend/assets/js/jquery.countdown.min.js' %}"></script>
+<!-- Main JS File -->
+<script src="{% static 'frontend/assets/js/main.js' %}"></script>
+<script src="{% static 'frontend/assets/js/demos/demo-3.js' %}"></script>
+
+</body>
+
+</html>

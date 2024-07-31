@@ -1,0 +1,187 @@
+{% extends '_frontend.html' %}
+
+{% block title %}Checkout{% endblock %}
+
+{% block frontend_content %}
+    <div class="container-fluid pt-2">
+        <main class="main">
+            <nav aria-label="breadcrumb" class="breadcrumb-nav">
+                <div class="container">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                        <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+                    </ol>
+                </div><!-- End .container -->
+            </nav><!-- End .breadcrumb-nav -->
+
+            <div class="page-content">
+                <div class="checkout">
+                    <div class="container" id="successpayment">
+                        {% if profile %}
+{#                            <form method="post" action="" class="space-y-5">#}
+{#                                {% csrf_token %}#}
+                                <div class="form-row p-3">
+                                    <div class="form-group col-md-6">
+                                        <label class="text-dark" for="firstName">First Name</label>
+                                        <input type="text" class="form-control" id="firstName" name="first_name"
+                                               {% if profile %}value="{{ profile.first_name }}"{% endif %}
+                                               placeholder="Jakesh" readonly>
+                                        {% if form.errors %}
+                                            <p>{{ form.first_name.errors }}</p>
+                                        {% endif %}
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="text-dark" for="lastName">Last Name</label>
+                                        <input type="text" class="form-control" id="lastName" name="last_name"
+                                               {% if profile %}value="{{ profile.last_name }}"{% endif %}
+                                               placeholder="Bohaju" readonly>
+                                        {% if form.errors %}
+                                            <p>{{ form.last_name.errors }}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="form-group p-3">
+                                    <label class="text-dark" for="address">Address</label>
+                                    <input type="text" class="form-control" id="address" name="address"
+                                           {% if profile %}value="{{ profile.address }}"{% endif %}
+                                           placeholder="25 st Bhaktapur">
+                                    {% if form.errors %}
+                                        <p>{{ form.address.errors }}</p>
+                                    {% endif %}
+                                </div>
+                                <div class="form-row p-3">
+                                    <div class="form-group col-md-6">
+                                        <label class="text-dark" for="mobileNo">Mobile Number</label>
+                                        <input type="text" class="form-control" id="mobileNo" name="mobile_no"
+                                               {% if profile %}value="{{ profile.mobileNo }}"{% endif %}
+                                               placeholder="9800000000">
+                                        {% if form.errors %}
+                                            <p>{{ form.mobile_no.errors }}</p>
+                                        {% endif %}
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="text-dark" for="zipCode">Zip Code</label>
+                                        <input type="text" class="form-control" id="zipCode" name="zipcode"
+                                               placeholder="44800">
+                                        {% if form.errors %}
+                                            <p>{{ form.zipcode.errors }}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="form-group p-3">
+                                    <label class="text-dark" for="city">City</label>
+                                    <input type="text" class="form-control" id="city" name="city"
+                                           placeholder="Bhaktapur">
+                                    {% if form.errors %}
+                                        <p>{{ form.city.errors }}</p>
+                                    {% endif %}
+                                </div>
+                                {#                                <button type="submit" class="btn btn-primary">Make Payment</button>#}
+                                <button id="payment-button" class="btn btn-outline-success">Pay with
+                                    Khalti
+                                </button>
+{#                            </form>#}
+                        {% else %}
+                            <a class="btn btn-primary" href="{% url 'add_profile' request.user.id %}"></a>
+                        {% endif %}
+                    </div><!-- End .container -->
+                </div><!-- End .checkout -->
+            </div><!-- End .page-content -->
+        </main><!-- End .main -->
+
+
+        {#    <h1 class="mb-6 text-2xl mt-6 text-center bg-green-800 text-white rounded-xl">Checkout</h1>#}
+        {##}
+        {#    <h2 class="text-xl text-green-800 ">Total Cost: Rs.{{ cart.get_total_cost }}</h2>#}
+        {##}
+        {#    <form method="post" action="{% url 'checkout' %}" class="space-y-5">#}
+        {#        {% csrf_token %}#}
+        {##}
+        {#        {{ form.as_p }}#}
+        {##}
+        {#        <button class="mt-4 inline-block px-4 py-2 bg-green-800 rounded-xl text-white">Checkout</button>#}
+        {#        </a>#}
+        {#    </form>#}
+    </div>
+
+
+
+      <script>
+        function verifyPayment(payload) {
+            console.log("in the js function")
+            console.log("data payload",payload)
+
+            {#data = [payload,arr]#}
+            {#console.log("array data", data)#}
+
+            $.ajax({
+                url: "{% url 'verify_payment' %}",
+                type: "POST",
+                data: payload,
+                dataType: 'json',
+                success: function (response) {
+                    alert(response)
+                    window.location.href = '/products';
+                },
+                error: function (error) {
+                    alert(error.responseJSON['message'])
+                }
+            });
+        }
+    </script>
+
+
+    <script>
+        var config = {
+            // replace the publicKey with yours
+            "publicKey": "test_public_key_dc87a440b6894a92b7f17ecd38f2b5a8",
+            "productIdentity": "1234567890",
+            "productName": "Dragon",
+            "productUrl": "http://gameofthrones.wikia.com/wiki/Dragons",
+            "paymentPreference": [
+                "KHALTI",
+                "EBANKING",
+                "MOBILE_BANKING",
+                "CONNECT_IPS",
+                "SCT",
+            ],
+            "eventHandler": {
+                onSuccess(payload) {
+                    // hit merchant api for initiating verfication
+                    console.log(payload);
+
+                    var first_name = $("#firstName").val()
+                    var last_name = $("#lastName").val()
+                    var address = $("#address").val()
+                    var mobile_no = $("#mobileNo").val()
+                    var zip_code = $("#zipCode").val()
+                    var city = $("#city").val()
+                    payload["first_name"] =first_name;
+                    payload["last_name"] =last_name;
+                    payload["address"] =address;
+                    payload["mobile_no"] =mobile_no;
+                    payload["zip_code"] =zip_code;
+                    payload["city"] =city;
+                    payload["total_amount"] = parseInt({{ cart.get_total_cost|add:100 }}) *100;
+                    payload["user_id"] = {{ request.user.id }};
+                    verifyPayment(payload)
+                },
+                onError(error) {
+                    console.log(error);
+                },
+                onClose() {
+                    console.log('widget is closing');
+                }
+            }
+        };
+
+        var checkout = new KhaltiCheckout(config);
+        var btn = document.getElementById("payment-button");
+        btn.onclick = function () {
+            // minimum transaction amount must be 10, i.e 1000 in paisa.
+            {#let amount =parseInt({{ cart.get_total_cost|add:100 }})*100;#}
+            checkout.show({'amount': 10000});
+        }
+    </script>
+{% endblock %}

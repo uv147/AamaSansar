@@ -1,0 +1,99 @@
+{% extends '_dashboard.html' %}
+{% block dashboard_content %}
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Vendor & Customer - Vendors</h1>
+        </div>
+
+        <!-- Content Row -->
+
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Customers List</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>S.N</th>
+                        <th>Username</th>
+                        <th>Total Order</th>
+                        <th>Total Products</th>
+                        <th>Total Buy (Rs.)</th>
+                        <th>Total Review</th>
+                        {#                        <th>Action</th>#}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for customer in customers %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            {% for value in customer %}
+                                <td>{{ value }}</td>
+                            {% endfor %}
+                            {#                                <td>{{ customer.us }}</td>#}
+                            {#                                <td>{{ uvendor.company_phone }}</td>#}
+                            {#                                <td>{{ uvendor.pan_vat_no }}</td>#}
+                            {#                                <td>{{ uvendor.vendor.username }}</td>#}
+                            {#                            <td><a class="btn btn-info btn-sm" style="color: white"#}
+                            {#                                   data-toggle="modal"#}
+                            {#                                   data-target="#category{{ uvendor.vendor }}del">#}
+                            {#                                <i class="fas fa-trash-alt">#}
+                            {#                                </i>#}
+                            {#                                Edit#}
+                            {#                            </a></td>#}
+                        </tr>
+                        {#                        <div id="category{{ uvendor.vendor }}del" class="modal fade"#}
+                        {#                             role="dialog">#}
+                        {#                            <div class="modal-dialog">#}
+                        {#                                <!-- Modal content-->#}
+                        {#                                <div class="modal-content">#}
+                        {#                                    <div class="modal-header">#}
+                        {#                                        <h4 class="modal-title" style="alignment: left">#}
+                        {#                                            Verification For {{ uvendor.company_name }}</h4>#}
+                        {#                                        <button type="button" class="close" data-dismiss="modal">#}
+                        {#                                            &times;#}
+                        {#                                        </button>#}
+                        {#                                    </div>#}
+                        {#                                    <div class="modal-body">#}
+                        {#                                        <div class="modal-del-fo">#}
+                        {#                                            <form method="post"#}
+                        {#                                                  action="{% url 'dashboard:vendor_update_form' uvendor.id %}">#}
+                        {#                                                {% csrf_token %}#}
+                        {#                                                <div class="form-row">#}
+                        {#                                                    <div class="col-8"><img alt="{{ uvendor.pan_vat_no }}"#}
+                        {#                                                                            src="{{ uvendor.pan_vat_registered_document.url }}"#}
+                        {#                                                                            class="rounded mx-auto d-block"#}
+                        {#                                                                            height="100%" width="100%"></div>#}
+                        {#                                                    <div class="col-4">Pan/Vat Number :<br>{{ uvendor.pan_vat_no }}#}
+                        {#                                                    </div>#}
+                        {#                                                </div>#}
+                        {#                                                <div class="form-row">#}
+                        {#                                                    <label for="verify_status">Verification Status</label>#}
+                        {#                                                    <input type="checkbox" class="form-control"#}
+                        {#                                                           id="verify_status"#}
+                        {#                                                           name="verify_status" {% if uvendor.verify_status %}#}
+                        {#                                                           checked {% endif %}>#}
+                        {#                                                </div>#}
+                        {#                                                <button type="submit" class="btn btn-info btn-sm">#}
+                        {#                                                    Update#}
+                        {#                                                </button>#}
+                        {#                                                <button class="btn btn-info btn-sm"#}
+                        {#                                                        data-dismiss="modal">Cancel#}
+                        {#                                                </button>#}
+                        {#                                            </form>#}
+                        {#                                        </div>#}
+                        {#                                    </div>#}
+                        {#                                </div>#}
+                        {#                            </div>#}
+                        {#                        </div>#}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

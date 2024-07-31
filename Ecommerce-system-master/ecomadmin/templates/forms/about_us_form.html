@@ -1,0 +1,129 @@
+{% extends '_dashboard.html' %}
+{% block dashboard_content %}
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">CMS - Add About Us</h1>
+            {#            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i#}
+            {#                    class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>#}
+        </div>
+
+        <section class="content">
+            <div class="container-fluid">
+                <!-- Small boxes (Stat box) -->
+                <div class="row">
+
+                    <div class="col">
+                        <div class="card card-dark">
+                            <div class="card-header">
+                                <h3 class="card-title">{% if about %}Update{% else %}Add{% endif %} About Us</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <!-- form start -->
+                            <form method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="aboutTitle">Company Name</label>
+                                        <input type="text" class="form-control" id="aboutTitle" name='title'
+                                               {% if about %}value="{{ about.title }}"{% endif %}
+                                               placeholder="Aama Sansar">
+                                        {% if form.errors %}
+                                            <p>{{ form.title.errors }}</p>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="bannerDescription">Company Information</label>
+                                        <input type="text" class="form-control" id="bannerDescription"
+                                               name='description'
+                                               {% if about %}value="{{ about.description }}"{% endif %}
+                                               style="width:100%;height:150px;" placeholder="Aama Sansar is leading digital e-commerce platform in Nepal...">
+                                        </input>
+                                        {% if form.errors %}
+                                            <p>{{ form.description.errors }}</p>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="address">Address</label>
+                                        <input type="text" class="form-control" id="address" name='address'
+                                               {% if about %}value="{{ about.address }}"{% endif %}
+                                               placeholder="Kathmandu">
+                                        {% if form.errors %}
+                                            <p>{{ form.address.errors }}</p>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="phoneNo">Phone Number</label>
+                                                <input type="text" class="form-control" id="phoneNo" name='phoneNo'
+                                                       {% if about %}value="{{ about.phoneNo }}"{% endif %}
+                                                       placeholder="015500000">
+                                                {% if form.errors %}
+                                                    <p>{{ form.phoneNo.errors }}</p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="mobileNo">Mobile Number</label>
+                                                <input type="text" class="form-control" id="mobileNo" name='mobileNo'
+                                                       {% if about %}value="{{ about.mobileNo }}"{% endif %}
+                                                       placeholder="9800000000">
+                                                {% if form.errors %}
+                                                    <p>{{ form.mobileNo.errors }}</p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="logo">Logo</label>
+                                                <input type="file" class="form-control" id="logo" name='logo'
+                                                       {% if about %}value="{{ about.logo }}"{% endif %}
+                                                       placeholder="logo"> {% if about.logo %}
+                                                <img alt="{{ about.logo }}" src="{{ about.logo.url }}"
+                                                     class="rounded mx-auto d-block"
+                                                     height="100" width="100%">{% endif %}
+                                                {% if form.errors %}
+                                                    <p>{{ form.logo.errors }}</p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="photo">Photo</label>
+                                                <input type="file" class="form-control" id="photo" name='photo'
+                                                       {% if about %}value="{{ about.photo }}"{% endif %}
+                                                       placeholder="photo"> {% if about.photo %}
+                                                <img alt="{{ about.photo }}" src="{{ about.photo.url }}"
+                                                     class="rounded mx-auto d-block"
+                                                     height="100" width="100%">{% endif %}
+                                                {% if form.errors %}
+                                                    <p>{{ form.photo.errors }}</p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!-- /.card-body -->
+
+                                <div class="card-footer">
+                                    <button type="submit" class="btn btn-dark">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends '_dashboard.html' %}
+{% load static %}
+{% block dashboard_content %}
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">CMS - About Us</h1>
+            {#            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i#}
+            {#                    class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>#}
+        </div>
+
+        <!-- Content Row -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Company Detail</h6>
+                <span class="float-right">
+                    {% if about %}
+                        <a class="btn btn-info btn-sm" style="color: white"
+                           href="{% url 'dashboard:about_us_update_form' about.id %}">
+                                    <i class="fas fa-plus">
+                                    </i>
+                                    Update Detail
+                                </a>
+                    {% else %}
+                        <a class="btn btn-info btn-sm" style="color: white"
+                           href="{% url 'dashboard:about_us_form' %}">
+                                    <i class="fas fa-plus">
+                                    </i>
+                                    Add Detail
+                                </a>
+
+                    {% endif %}
+                </span>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6">
+                        <div><h5 class="text-dark font-weight-bold">Company Name</h5>{{ about.title }}</div>
+                        <br>
+                        <div><h5 class="text-dark font-weight-bold">Company Address</h5>{{ about.address }}<br></div>
+                        <div><h5 class="text-dark font-weight-bold">Company Information</h5>{{ about.description }}
+                        </div>
+                        <br>
+                        <div><h5 class="text-dark font-weight-bold">Phone Number</h5>{{ about.phoneNo }}</div>
+                        <br>
+                        {% if about.mobileNo %}
+                            <div><h5 class="text-dark font-weight-bold">Mobile Number</h5>{{ about.mobileNo }}</div>
+                            <br>{% endif %}
+                    </div>
+                    <div class="col-6">
+                        <div>
+                            <img src="{{ about.logo.url }}" height="100%" width="100%">
+                        </div>
+                        <div>{% if about.photo %}
+                            <img src="{{ about.photo.url }}" height="100%" width="100%">
+                        {% endif %}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+{% endblock %}
+<script src="{% static 'dashboard/js/demo/datatables-demo.js' %}"></script>

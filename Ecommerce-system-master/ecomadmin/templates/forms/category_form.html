@@ -1,0 +1,50 @@
+{% extends '_dashboard.html' %}
+{% block dashboard_content %}
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Inventory - Add Category</h1>
+{#            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i#}
+{#                    class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>#}
+        </div>
+
+        <section class="content">
+            <div class="container-fluid">
+                <!-- Small boxes (Stat box) -->
+                <div class="row">
+
+                    <div class="col">
+                        <div class="card card-dark">
+                            <div class="card-header">
+                                <h3 class="card-title">{% if category %}Update{% else %}Add{% endif %} Category</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <!-- form start -->
+                            <form method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="categoryName">Category Name</label>
+                                        <input type="text" class="form-control" id="categoryName" name='title'
+                                               {% if category %}value="{{ category.category_title }}"{% endif %}
+                                               placeholder="Laptop">
+                                        {% if form.errors %}
+                                            <p>{{ form.category_title.errors }}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <!-- /.card-body -->
+
+                                <div class="card-footer">
+                                    <button type="submit" class="btn btn-dark">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+{% endblock %}

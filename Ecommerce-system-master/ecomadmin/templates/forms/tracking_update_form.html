@@ -1,0 +1,107 @@
+{% extends '_dashboard.html' %}
+{% block dashboard_content %}
+    <div class="container-fluid">
+
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Order - Edit Tracking</h1>
+            {#            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i#}
+            {#                    class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>#}
+        </div>
+
+        <!-- Content Row -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Order Detail</h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6">
+                        <h6 class="mb-2 font-weight-bold text-info">Item Detail</h6>
+
+                        <table class="table table-bordered" id="dataTable">
+                            <tr>
+                                <th>Order Id</th>
+                                <td>{{ orderitem.order.id }}</td>
+                            </tr>
+                            <tr>
+                                <th>Product Name</th>
+                                <td>{{ orderitem.product.title }}</td>
+                            </tr>
+                            <tr>
+                                <th>Product Quantity</th>
+                                <td>{{ orderitem.quantity }}</td>
+                            </tr>
+                            <tr>
+                                <th>Product Price (Rs.)</th>
+                                <td>{{ orderitem.price }}</td>
+                            </tr>
+                            <tr>
+                                <th>Order By</th>
+                                <td>{{ orderitem.order.created_by }}</td>
+                            </tr>
+                            <tr>
+                                <th>Tracking Status</th>
+                                <td>{{ orderitem.tracking_status }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col">
+                        <h6 class="mb-2 font-weight-bold text-info">Vendor Detail</h6>
+                        <table class="table table-bordered">
+                            {% for vendor in vendors %}
+                                {% if vendor.vendor.username == orderitem.product.user.username %}
+                                    <tr>
+                                        <th>Company Name</th>
+                                        <td>{{ vendor.company_name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Company Address</th>
+                                        <td>{{ vendor.company_address }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Phone No.</th>
+                                        <td>{{ vendor.company_phone }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Pan/Vat No.</th>
+                                        <td>{{ vendor.pan_vat_no }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>User Name</th>
+                                        <td>{{ vendor.vendor.username }}</td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Update Tracking Status</h6>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-row">
+                    <label for="tracking_status">Tracking Status </label>
+                    <select class="form-control select2" name="tracking_status">
+                        {% for option in form.fields.tracking_status.choices %}
+                            <option value="{{ option.0 }}"
+                                    {% if  form.tracking_status.value == option.0 %}selected {% endif %}>{{ option.1 }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-info btn-sm">
+                    Update
+                </button>
+                <button class="btn btn-info btn-sm"
+                        data-dismiss="modal">Cancel
+                </button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

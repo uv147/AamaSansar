@@ -1,0 +1,5 @@
+{% for category in categories|slice:'6' %}
+    <li class="megamenu-container">
+        <a href="{% url 'category_detail' category.slug %}">{{ category.title }}</a>
+    </li>
+{% endfor %}

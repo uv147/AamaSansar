@@ -1,0 +1,80 @@
+{% extends '_dashboard.html' %}
+{% block dashboard_content %}
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">CMS - Add Banner</h1>
+{#            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i#}
+{#                    class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>#}
+        </div>
+
+        <section class="content">
+            <div class="container-fluid">
+                <!-- Small boxes (Stat box) -->
+                <div class="row">
+
+                    <div class="col">
+                        <div class="card card-dark">
+                            <div class="card-header">
+                                <h3 class="card-title">{% if banner %}Update{% else %}Add{% endif %} Banner</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <!-- form start -->
+                            <form method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="bannerTitle">Banner Title</label>
+                                        <input type="text" class="form-control" id="bannerTitle" name='title'
+                                               {% if banner %}value="{{ banner.title }}"{% endif %}
+                                               placeholder="Banner Title">
+                                        {% if form.errors %}
+                                            <p>{{ form.title.errors }}</p>
+                                        {% endif %}
+                                    </div>
+
+                                <div class="form-group">
+                                        <label for="bannerCaption">Banner Caption</label>
+                                        <input type="text" class="form-control" id="bannerCaption" name='caption'
+                                               {% if banner %}value="{{ banner.caption }}"{% endif %}
+                                               placeholder="Banner Caption">
+                                        {% if form.errors %}
+                                            <p>{{ form.caption.errors }}</p>
+                                        {% endif %}
+                                    </div>
+
+                                 <div class="form-group">
+                                        <label for="bannerWeight">Banner Weight</label>
+                                        <input type="text" class="form-control" id="bannerWeight" name='weight'
+                                               {% if banner %}value="{{ banner.weight }}"{% endif %}
+                                               placeholder="50">
+                                        {% if form.errors %}
+                                            <p>{{ form.weight.errors }}</p>
+                                        {% endif %}
+                                    </div>
+
+                                <div class="form-group">
+                                        <label for="bannerImage">Banner Image</label>
+                                        <input type="file" class="form-control" id="bannerImage" name='image'
+                                               {% if banner %}value="{{ banner.image }}"{% endif %}
+                                               placeholder="Banner Image">
+                                        {% if form.errors %}
+                                            <p>{{ form.title.errors }}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <!-- /.card-body -->
+
+                                <div class="card-footer">
+                                    <button type="submit" class="btn btn-dark">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+{% endblock %}

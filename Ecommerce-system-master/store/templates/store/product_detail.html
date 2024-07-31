@@ -1,0 +1,286 @@
+{% extends '_frontend.html' %}
+
+{% block title %}
+    {{ product.title }}
+{% endblock %}
+
+{% load static %}
+{% load average_rating %}
+{% block frontend_content %}
+    <div class="container-fluid pt-2">
+
+        <main class="main">
+            <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
+                <div class="container d-flex align-items-center">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'frontpage' %}">Home</a></li>
+                        <li class="breadcrumb-item">Products</li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ product.title }}</li>
+                    </ol>
+                </div><!-- End .container -->
+            </nav><!-- End .breadcrumb-nav -->
+
+            <div class="page-content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-9">
+                            <div class="product-details-top">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="product-gallery">
+                                            <figure class="product-main-image">
+                                                <img id="product-zoom"
+                                                     src="{{ product.image.url }}"
+                                                     data-zoom-image="{{ product.image.url }}"
+                                                     alt="{{ product.title }}">
+                                            </figure><!-- End .product-main-image -->
+                                        </div><!-- End .product-gallery -->
+                                    </div><!-- End .col-md-6 -->
+
+                                    <div class="col-md-6">
+                                        <div class="product-details product-details-sidebar">
+                                            <h1 class="product-title">{{ product.title }}</h1>
+                                            <!-- End .product-title -->
+
+                                            <div class="ratings-container">
+                                                <div class="ratings">
+                                                    <div class="ratings-val" style="width: {{ product|avg_rating }}%;"></div>
+                                                    <!-- End .ratings-val -->
+                                                </div><!-- End .ratings -->
+                                                <a class="ratings-text" href="" id="review-link">( {{ product|review_count }}
+                                                    Reviews )</a>
+                                            </div><!-- End .rating-container -->
+
+                                            <div class="product-price">
+                                                Rs. {{ product.price }}
+                                            </div><!-- End .product-price -->
+
+                                            <div class="product-content">
+                                                <p>{{ product.description | truncatewords:40 }}</p>
+                                            </div><!-- End .product-content -->
+                                            {% if not request.user.is_superuser and not request.user.is_vendor %}
+                                                <div class="product-details-action">
+                                                    <div class="details-action-col">
+                                                        <label for="qty">Qty:</label>
+                                                        <div class="product-details-quantity">
+                                                            <input type="number" id="qty" class="form-control" value="1"
+                                                                   min="1" max="10" step="1" data-decimals="0" required>
+                                                        </div><!-- End .product-details-quantity -->
+
+                                                        <a href="{% url 'add_to_cart' product.id %}"
+                                                           class="btn-product btn-cart">add to cart</a>
+                                                    </div><!-- End .details-action-col -->
+
+                                                </div><!-- End .product-details-action -->
+                                            {% endif %}
+                                            <div class="product-details-footer details-footer-col">
+                                                <div class="product-cat">
+                                                    <span>Category:</span>
+                                                    <a href="{% url 'category_detail' product.category.slug %}">{{ product.category.title }}</a>
+                                                </div><!-- End .product-cat -->
+                                            </div><!-- End .product-details-footer -->
+                                        </div><!-- End .product-details -->
+                                    </div><!-- End .col-md-6 -->
+                                </div><!-- End .row -->
+                            </div><!-- End .product-details-top -->
+
+                            <div class="product-details-tab">
+                                <ul class="nav nav-pills justify-content-center" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="product-desc-link" data-toggle="tab"
+                                           href="#product-desc-tab" role="tab" aria-controls="product-desc-tab"
+                                           aria-selected="true">Description</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="product-review-link" data-toggle="tab"
+                                           href="#product-review-tab" role="tab" aria-controls="product-review-tab"
+                                           aria-selected="false">Reviews ({{ reviews.count }})</a>
+                                    </li>
+                                    {#                                    <li class="nav-item">#}
+                                    {#                                        <a class="nav-link" id="product-review-link" data-toggle="tab"#}
+                                    {#                                           href="#product-review-tab" role="tab" aria-controls="product-review-tab"#}
+                                    {#                                           aria-selected="false">Reviews</a>#}
+                                    {#                                    </li>#}
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane fade show active" id="product-desc-tab" role="tabpanel"
+                                         aria-labelledby="product-desc-link">
+                                        <div class="product-desc-content">
+                                            <h3>Product Information</h3>
+                                            <p>{{ product.description }}</p>
+                                        </div><!-- End .product-desc-content -->
+                                    </div><!-- .End .tab-pane -->
+
+                                    <div class="tab-pane fade" id="product-review-tab" role="tabpanel"
+                                         aria-labelledby="product-review-link">
+                                        <div class="reviews row">
+                                            <div class="row">
+                                                <h3>Write Reviews</h3>
+                                            </div>
+                                            <div class="row">
+                                                {% if request.user.is_authenticated %}
+                                                    <form method="post" action=".">
+                                                        {% csrf_token %}
+                                                        <div col-3>
+                                                            <label class="text-dark">Rating</label>
+                                                            <select name="rating">
+                                                                <option value="1">1</option>
+                                                                <option value="2">2</option>
+                                                                <option value="3" selected>3</option>
+                                                                <option value="4">4</option>
+                                                                <option value="5">5</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-9">
+                                                            <label class="text-dark">Comment</label>
+                                                            <textarea name="content" rows="3" cols="110"></textarea>
+                                                        </div>
+                                                        <div>
+                                                            <button class="btn btn-primary">
+                                                                Submit
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                {% endif %}
+                                            </div>
+
+                                            <div class="row pt-3">
+                                                <h3>Reviews ({{ reviews.count }})</h3>
+                                                <div><br>
+                                                    {% for review in reviews %}
+                                                        <div class="review">
+                                                            <div class="row no-gutters">
+                                                                <div class="col-auto">
+                                                                    <h4>
+                                                                        <a href="#">{{ review.created_by.username }}</a>
+                                                                    </h4>
+                                                                    <div class="ratings-container">
+                                                                        <div class="ratings">
+                                                                            <div class="ratings-val"
+                                                                                 style="width: 80%;"></div>
+                                                                            <!-- End .ratings-val -->
+                                                                        </div><!-- End .ratings -->
+                                                                    </div><!-- End .rating-container -->
+                                                                    <span class="review-date">{{ review.created_at|date:"D d M Y" }}</span>
+                                                                </div><!-- End .col -->
+                                                                <div class="col">
+                                                                    <div class="review-content">
+                                                                        <p>{{ review.content }}</p>
+                                                                    </div><!-- End .review-content -->
+                                                                </div><!-- End .col-auto -->
+                                                            </div><!-- End .row -->
+                                                        </div><!-- End .review -->
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div><!-- End .reviews -->
+                                    </div><!-- .End .tab-pane -->
+                                </div><!-- End .tab-content -->
+                            </div><!-- End .product-details-tab -->
+
+                            <h2 class="title text-center mb-4">You May Also Like</h2><!-- End .title text-center -->
+                            <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow"
+                                 data-toggle="owl"
+                                 data-owl-options='{
+                                    "nav": false,
+                                    "dots": true,
+                                    "margin": 20,
+                                    "loop": false,
+                                    "responsive": {
+                                        "0": {
+                                            "items":1
+                                        },
+                                        "480": {
+                                            "items":2
+                                        },
+                                        "768": {
+                                            "items":3
+                                        },
+                                        "992": {
+                                            "items":4
+                                        },
+                                        "1200": {
+                                            "items":4,
+                                            "nav": true,
+                                            "dots": false
+                                        }
+                                    }
+                                }'>
+                                {% for product in random_products %}
+                                    <div class="product product-7 text-center">
+                                        <figure class="product-media">
+                                            <span class="product-label label-new">New</span>
+                                            <a href="{% url 'product_detail' product.category.slug product.slug %}">
+                                                <img src="{{ product.image.url }}" alt="{{ product.title }}"
+                                                     class="product-image">
+                                            </a>
+                                            {% if not request.user.is_superuser and not request.user.is_vendor %}
+                                                <div class="product-action">
+                                                    <a href="{% url 'add_to_cart' product.id %}"
+                                                       class="btn-product btn-cart"><span>add to cart</span></a>
+                                                </div><!-- End .product-action -->
+                                            {% endif %}
+                                        </figure><!-- End .product-media -->
+
+                                        <div class="product-body">
+                                            <div class="product-cat">
+                                                <a href="{% url 'category_detail' product.category.slug %}">{{ product.category.title }}</a>
+                                            </div><!-- End .product-cat -->
+                                            <h3 class="product-title"><a
+                                                    href="{% url 'product_detail' product.category.slug product.slug %}">{{ product.title }}</a>
+                                            </h3><!-- End .product-title -->
+                                            <div class="product-price">
+                                                Rs. {{ product.price }}
+                                            </div><!-- End .product-price -->
+                                            <div class="ratings-container">
+                                                <div class="ratings">
+                                                    <div class="ratings-val" style="width: {{ product|avg_rating }}%;"></div>
+                                                    <!-- End .ratings-val -->
+                                                </div><!-- End .ratings -->
+                                                <span class="ratings-text">( {{ product|review_count }} Reviews )</span>
+                                            </div><!-- End .rating-container -->
+
+                                        </div><!-- End .product-body -->
+                                    </div><!-- End .product -->
+                                {% endfor %}
+                            </div><!-- End .owl-carousel -->
+                        </div><!-- End .col-lg-9 -->
+
+                        <aside class="col-lg-3">
+                            <div class="sidebar sidebar-product">
+                                <div class="widget widget-products">
+                                    <h4 class="widget-title">Recommended Product</h4><!-- End .widget-title -->
+
+                                    <div class="products">
+                                        {% for product in recommended_products %}
+                                            <div class="product product-sm">
+                                                <figure class="product-media">
+                                                    <a href="{% url 'product_detail' product.category.slug product.slug %}">
+                                                        <img src="{{ product.image.url }}"
+                                                             alt="{{ product.title }}" class="product-image">
+                                                    </a>
+                                                </figure>
+
+                                                <div class="product-body">
+                                                    <h5 class="product-title"><a
+                                                            href="{% url 'product_detail' product.category.slug product.slug %}">{{ product.title }}</a>
+                                                    </h5><!-- End .product-title -->
+                                                    <div class="product-price">
+                                                        <span class="new-price">Rs. {{ product.price }}</span>
+                                                    </div><!-- End .product-price -->
+                                                </div><!-- End .product-body -->
+                                            </div><!-- End .product product-sm -->
+                                        {% endfor %}
+                                    </div><!-- End .products -->
+
+                                </div><!-- End .widget widget-products -->
+
+                            </div><!-- End .sidebar sidebar-product -->
+                        </aside><!-- End .col-lg-3 -->
+                    </div><!-- End .row -->
+
+                </div><!-- End .container -->
+            </div><!-- End .page-content -->
+        </main><!-- End .main -->
+    </div>
+{% endblock %}

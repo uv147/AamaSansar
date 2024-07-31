@@ -1,0 +1,224 @@
+{% extends '_dashboard.html' %}
+{% block dashboard_content %}
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Vendor & Customer - Vendors</h1>
+            {#            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i#}
+            {#                    class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>#}
+        </div>
+
+        <!-- Content Row -->
+
+        {% if un_verified_vendors %}
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Un-Verified Vendor List</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>S.N</th>
+                            <th>Company Name</th>
+                            <th>Address</th>
+                            <th>Phone No.</th>
+                            <th>Pan/Vat No.</th>
+                            <th>User Name</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for uvendor in un_verified_vendors %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ uvendor.company_name }}</td>
+                                <td>{{ uvendor.company_address }}</td>
+                                <td>{{ uvendor.company_phone }}</td>
+                                <td>{{ uvendor.pan_vat_no }}</td>
+                                <td>{{ uvendor.vendor.username }}</td>
+                                <td>{% if uvendor.verify_status %} Verified {% else %}Un-Verified{% endif %}</td>
+                                <td><a class="btn btn-info btn-sm" style="color: white"
+                                       data-toggle="modal"
+                                       data-target="#category{{ uvendor.vendor }}del">
+                                    <i class="fas fa-trash-alt">
+                                    </i>
+                                    Edit
+                                </a></td>
+                            </tr>
+                            <div id="category{{ uvendor.vendor }}del" class="modal fade"
+                                 role="dialog">
+                                <div class="modal-dialog">
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" style="alignment: left">
+                                                Verification For {{ uvendor.company_name }}</h4>
+                                            <button type="button" class="close" data-dismiss="modal">
+                                                &times;
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="modal-del-fo">
+                                                <form method="post"
+                                                      action="{% url 'dashboard:vendor_update_form' uvendor.id %}">
+                                                    {% csrf_token %}
+                                                    <div class="form-row">
+                                                        <div class="col-8"><img alt="{{ uvendor.pan_vat_no }}"
+                                                                                src="{{ uvendor.pan_vat_registered_document.url }}"
+                                                                                class="rounded mx-auto d-block"
+                                                                                height="100%" width="100%"></div>
+                                                        <div class="col-4">Pan/Vat Number :<br>{{ uvendor.pan_vat_no }}</div>
+                                                    </div>
+                                                    <div class="form-row">
+                                                        <label for="verify_status">Verification Status</label>
+                                                        <input type="checkbox" class="form-control"
+                                                               id="verify_status"
+                                                               name="verify_status" {% if uvendor.verify_status %}
+                                                               checked {% endif %}>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-info btn-sm">
+                                                        Update
+                                                    </button>
+                                                    <button class="btn btn-info btn-sm"
+                                                            data-dismiss="modal">Cancel
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <hr>
+        {% endif %}
+
+        {% if verified_vendors %}
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Verified Vendor List</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>S.N</th>
+                            <th>Company Name</th>
+                            <th>Address</th>
+                            <th>Phone No.</th>
+                            <th>Pan/Vat No.</th>
+                            <th>User Name</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for vendor in verified_vendors %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ vendor.company_name }}</td>
+                                <td>{{ vendor.company_address }}</td>
+                                <td>{{ vendor.company_phone }}</td>
+                                <td>{{ vendor.pan_vat_no }}</td>
+                                <td>{{ vendor.vendor.username }}</td>
+                                <td>{% if vendor.verify_status %} Verified {% else %}Un-Verified{% endif %}</td>
+                                <td><a class="btn btn-info btn-sm" style="color: white"
+                                       data-toggle="modal"
+                                       data-target="#vendor{{ vendor.vendor }}update">
+                                    <i class="fas fa-trash-alt">
+                                    </i>
+                                    Edit
+                                </a>
+                                    <a class="btn btn-info btn-sm" style="color: white"
+                                       data-toggle="modal"
+                                       data-target="#vendor{{ vendor.vendor }}del">
+                                        <i class="fas fa-trash-alt">
+                                        </i>
+                                        Delete
+                                    </a>
+                                </td>
+                            </tr>
+                            <div id="vendor{{ vendor.vendor }}update" class="modal fade"
+                                 role="dialog">
+                                <div class="modal-dialog">
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" style="alignment: left">
+                                                Verification For {{ vendor.company_name }}</h4>
+                                            <button type="button" class="close" data-dismiss="modal">
+                                                &times;
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="modal-del-fo">
+                                                <form method="post"
+                                                      action="{% url 'dashboard:vendor_update_form' vendor.id %}">
+                                                    {% csrf_token %}
+                                                    <div class="form-row">
+                                                        <label for="verify_status">Verification Status</label>
+                                                        <input type="checkbox" class="form-control"
+                                                               id="verify_status"
+                                                               name="verify_status" {% if vendor.verify_status %}
+                                                               checked {% endif %}>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-info btn-sm">
+                                                        Update
+                                                    </button>
+                                                    <button class="btn btn-info btn-sm"
+                                                            data-dismiss="modal">Cancel
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="vendor{{ vendor.vendor }}del" class="modal fade"
+                                 role="dialog">
+                                <div class="modal-dialog">
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" style="alignment: left">
+                                                Delete {{ vendor.company_name }}</h4>
+                                            <button type="button" class="close" data-dismiss="modal">
+                                                &times;
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Are you sure you want to delete
+                                                "{{ vendor.company_name }}"?</p>
+                                            <div class="modal-del-fo">
+                                                <form method="post"
+                                                      action="{% url 'dashboard:delete_vendor' vendor.id %}">
+                                                    {% csrf_token %}
+                                                    <button value="Confirm" class="btn btn-info btn-sm">
+                                                        Yes
+                                                    </button>
+                                                    <button class="btn btn-info btn-sm"
+                                                            data-dismiss="modal">No
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

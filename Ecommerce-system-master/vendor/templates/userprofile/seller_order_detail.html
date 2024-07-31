@@ -1,0 +1,54 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Order detail-{{ order.id }} {% endblock %}
+
+{% block content %}
+
+    <h1 class="mb-6 text-2xl">Order Detail-{{ orderitem.order.id }}</h1>
+    <h2 class="mb-3 text-2xl">My Products in this order</h2>
+
+    <div class="flex flex-wrap">
+
+        <table>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th>Order Tracking</th>
+                <th>Action</th>
+            </tr>
+            <tr>
+                <td>{{ orderitem.product.title }}</td>
+                <td>{{ orderitem.quantity }}</td>
+                <td>Rs. {{ orderitem.price }}</td>
+                <td>{{ orderitem.tracking_status }}</td>
+                <td>Edit</td>
+            </tr>
+        </table>
+
+        <!-- <div class="w-1/3">
+          <strong>Title</strong>
+        </div>
+        <div class="w-1/3">
+          <strong>Quantity</strong>
+        </div>
+        <div class="w-1/3">
+          <strong>Price</strong>
+        </div>
+      
+      </div>
+      <!-- {% if item.product.user == request.user %} -->
+            <!-- <div class="flex flex-wrap">
+         <div class="w-1/3"><h1>kdjfkdjfk</h1>
+          {{ orderitem.product.title }}
+        </div>
+        <div class="w-1/3">
+          {{ orderitem.quantity }}
+        </div>
+        <div class="w-1/3">
+           Rs. {{ orderitem.price }}
+        </div>
+      </div> --> -->
+            <!-- {% endif %}  -->
+
+{% endblock %}

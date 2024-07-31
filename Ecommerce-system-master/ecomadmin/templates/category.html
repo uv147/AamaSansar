@@ -1,0 +1,88 @@
+{% extends '_dashboard.html' %}
+{% load static %}
+{% block dashboard_content %}
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Inventory - Category</h1>
+            {#            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i#}
+            {#                    class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>#}
+        </div>
+
+        <!-- Content Row -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Category List</h6>
+                <span class="float-right"><a class="btn btn-info btn-sm" style="color: white"
+                                             href="{% url 'dashboard:category_form' %}">
+                                    <i class="fas fa-plus">
+                                    </i>
+                                    Add Category
+                                </a></span>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="example1" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>S.N</th>
+                            <th>Name</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for category in categories %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ category.title }}</td>
+                                <td><a class="btn btn-info btn-sm" style="color: white"
+                                       data-toggle="modal"
+                                       data-target="#category{{ category.slug }}del">
+                                    <i class="fas fa-trash-alt">
+                                    </i>
+                                    Delete
+                                </a></td>
+                            </tr>
+                            <div id="category{{ category.slug }}del" class="modal fade"
+                                 role="dialog">
+                                <div class="modal-dialog">
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" style="alignment: left">
+                                                Delete {{ category.title }}</h4>
+                                            <button type="button" class="close" data-dismiss="modal">
+                                                &times;
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Are you sure you want to delete
+                                                "{{ category.title }}"?</p>
+                                            <div class="modal-del-fo">
+                                                <form method="post"
+                                                      action="{% url 'dashboard:delete_category' category.slug %}">
+                                                    {% csrf_token %}
+                                                    <button value="Confirm" class="btn btn-info btn-sm">
+                                                        Yes
+                                                    </button>
+                                                    <button class="btn btn-info btn-sm"
+                                                            data-dismiss="modal">No
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+{% endblock %}
+<script src="{% static 'dashboard/js/demo/datatables-demo.js' %}"></script>

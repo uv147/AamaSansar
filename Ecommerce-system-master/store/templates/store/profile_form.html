@@ -1,0 +1,74 @@
+{% extends '_frontend.html' %}
+
+{% block title %}{{ request.user.username }} | Profile{% endblock %}
+
+{% block frontend_content %}
+    <div class="container-fluid pt-2">
+        <main class="main">
+            <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
+                <div class="container d-flex align-items-center">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'frontpage' %}">Home</a></li>
+                        <li class="breadcrumb-item">{{ request.user.username }}</li>
+                        <li class="breadcrumb-item active" aria-current="page">Add Detail</li>
+                    </ol>
+                </div><!-- End .container -->
+            </nav><!-- End .breadcrumb-nav -->
+            <div class="page-content">
+                <div class="container">
+                    <form method="post" action="{% url 'add_profile' request.user.id %}" enctype="multipart/form-data" style="background-color: #e5efea">
+                        {% csrf_token %}
+                        <div class="form-row p-3">
+                            <div class="form-group col-md-6">
+                                <label class="text-dark" for="firstName">First Name</label>
+                                <input type="text" class="form-control" id="firstName" name="first_name"
+                                       {% if profile %}value="{{ profile.first_name }}"{% endif %} placeholder="Jakesh">
+                                {% if form.errors %}
+                                    <p>{{ form.first_name.errors }}</p>
+                                {% endif %}
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="text-dark" for="lastName">Last Name</label>
+                                <input type="text" class="form-control" id="lastName" name="last_name"
+                                       {% if profile %}value="{{ profile.last_name }}"{% endif %} placeholder="Bohaju">
+                                {% if form.errors %}
+                                    <p>{{ form.last_name.errors }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-group p-3">
+                            <label class="text-dark" for="address">Address</label>
+                            <input type="text" class="form-control" id="address" name="address"
+                                   {% if profile %}value="{{ profile.address }}"{% endif %}
+                                   placeholder="25 st Bhaktapur">
+                            {% if form.errors %}
+                                <p>{{ form.address.errors }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="form-group p-3">
+                            <label class="text-dark" for="mobileNumber">Mobile Number</label>
+                            <input type="text" class="form-control" id="mobileNumber" name="mobileNo"
+                                   {% if profile %}value="{{ profile.mobileNo }}" {% endif %}
+                                   placeholder="9800000000">
+                            {% if form.errors %}
+                                <p>{{ form.mobileNo.errors }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="form-row p-3">
+                            <div class="form-group col-md-6">
+                                <label class="text-dark" for="photo">Profile Photo</label>
+                                <input type="file" class="form-control" id="photo" name="photo"
+                                        {% if profile.photo %}{{ profile.photo }} {% endif %}>
+                                {% if form.errors %}
+                                    <p>{{ form.photo.errors }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    <input type="hidden" name="user" value="{{ request.user.id }}">
+                       <button type="submit" class="btn btn-primary">Add Detail</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+{% endblock %}

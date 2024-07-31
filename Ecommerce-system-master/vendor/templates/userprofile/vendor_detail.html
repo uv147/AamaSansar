@@ -1,0 +1,81 @@
+{% extends 'core/base.html' %}
+{% block title %} {% firstof user.get_full_name user.username %}
+{% endblock %}
+{% block content %}
+    <div class="container-fluid">
+        <h1 style="text-align: center; text-decoration-color: #0b0921; font-size: larger; font-family: 'Times New Roman'; font-style: oblique">
+            Profile Detail</h1>
+        <hr>
+        <br>
+        <div class="row">
+            <div class="col-5">
+                <div class="row pt-1">
+                    <h4 style="font-style: initial; font-size: large; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; text-align: center">
+                        Company Detail</h4>
+                </div>
+                <div class="row">
+                    <table>
+                        <tr>
+                            <th>Company Name</th>
+                            <td>{{ vendor_detail.company_name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Address</th>
+                            <td>{{ vendor_detail.company_address }}</td>
+                        </tr>
+                        <tr>
+                            <th>Phone Number</th>
+                            <td>{{ vendor_detail.company_phone }}</td>
+                        </tr>
+                        <tr>
+                            <th>Pan/Vat Number</th>
+                            <td>{{ vendor_detail.pan_vat_no }}</td>
+                        </tr>
+                        <tr>
+                            <th>Verify Status</th>
+                            <td>{{ vendor_detail.verify_status }}</td>
+                        </tr>
+                        <tr>
+                            <th>Registered Date</th>
+                            <td>{{ vendor_detail.created_date|date:"D d M Y" }}</td>
+                        </tr>
+                        <tr>
+                        <td>
+                            <div>
+                                {% if vendor_detail %}<a type="button" class="btn btn-primary text-dark"
+                                                         href="{% url 'seller_profile_update' request.user.id vendor_detail.id %}">Update
+                                    Company</a>{% endif %}
+                            </div>
+                        </td></tr>
+                    </table>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="row">
+                </div>
+                <div class="row">
+                    {% if vendor_detail.pan_vat_registered_document %}
+                        <h4>Pan/Vat Document</h4><br>
+                        <img alt="{{ vendor_detail.pan_vat_no }}"
+                             src="{{ vendor_detail.pan_vat_registered_document.url }}"
+                             class="rounded-pill mx-auto d-block"
+                             height="100%" width="100%">
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="row">
+                </div>
+                <div class="row">
+                    {% if vendor_detail.company_registered_document %}
+                        <h4>Company Document</h4><br>
+                        <img alt="{{ vendor_detail.company_name }}"
+                             src="{{ vendor_detail.company_registered_document.url }}"
+                             class="rounded-pill mx-auto d-block"
+                             height="100%" width="100%">
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

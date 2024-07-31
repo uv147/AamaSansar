@@ -1,0 +1,180 @@
+{% extends '_frontend.html' %}
+
+{% block title %}Cart{% endblock %}
+{% load static %}
+{% load index_value %}
+{% block frontend_content %}
+    <div class="container-fluid pt-2">
+
+        <main class="main">
+            <nav aria-label="breadcrumb" class="breadcrumb-nav">
+                <div class="container">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'frontpage' %}">Home</a></li>
+                        <li class="breadcrumb-item">{{ request.user.username }}</li>
+                        <li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
+                    </ol>
+                </div><!-- End .container -->
+            </nav><!-- End .breadcrumb-nav -->
+            {% if cart|length %}
+                <div class="page-content">
+                    <div class="cart">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-9">
+                                    <table class="table table-cart table-mobile">
+                                        <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Price</th>
+                                            <th>Quantity</th>
+                                            <th>Total (Rs.)</th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody>
+                                        {% for item in cart %}
+                                            <tr>
+                                                <td class="product-col">
+                                                    <div class="product">
+                                                        <figure class="product-media">
+                                                            <a href="{% url 'product_detail' item.product.category.slug item.product.slug %}">
+                                                                <img src="{{ item.product.image.url }}"
+                                                                     alt="Product image">
+                                                            </a>
+                                                        </figure>
+                                                        <h3 class="product-title">
+                                                            <a href="{% url 'product_detail' item.product.category.slug item.product.slug %}">{{ item.product.title }}</a>
+                                                        </h3><!-- End .product-title -->
+                                                    </div><!-- End .product -->
+                                                </td>
+                                                <td class="price-col">Rs. {{ item.product.price }}</td>
+                                                <td class="quantity-col">
+                                                    <div class="cart-product-quantity">
+                                                        <a href="{% url 'change_quantity' item.product.id %}?action=decrease"
+                                                           class="p-2 rounded-xl bg-gray-400 text-dark"><i
+                                                                class="fas fa-light fa-minus"></i></a>
+                                                        {{ item.quantity }}
+                                                        <a href="{% url 'change_quantity' item.product.id %}?action=increase"
+                                                           class="p-2 rounded-xl bg-gray-400 text-dark"><i
+                                                                class="fas fa-light fa-plus"></i></a>
+                                                    </div><!-- End .cart-product-quantity -->
+                                                </td>
+                                                <td class="total-col text-dark total_cost">{{ cart.get_gross_total_cost|index:forloop.counter0 }}</td>
+                                                <td class="remove-col">
+                                                    <a class="button btn-remove"
+                                                       data-toggle="modal"
+                                                       data-target="#item{{ item.id }}remove">
+                                                        <i class="icon-close"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+
+                                            <div id="item{{ item.id }}remove" class="modal fade"
+                                                 role="dialog">
+                                                <div class="modal-dialog">
+                                                    <!-- Modal content-->
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title" style="alignment: left">
+                                                                Remove {{ item.product.title }}</h4>
+                                                            <button type="button" class="close" data-dismiss="modal">
+                                                                &times;
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body p-5">
+                                                            <p>Are you sure you want to remove
+                                                                "{{ item.product.title }}" from cart?</p><img
+                                                                alt="{{ item.product.title }}"
+                                                                src="{{ item.product.image.url }}"
+                                                                class="rounded mx-auto d-block"
+                                                                height="50" width="100">
+                                                            <div class="modal-del-fo">
+                                                                <form method="post"
+                                                                      action="{% url 'remove_from_cart' item.id %}"
+                                                                      class="p-2">
+                                                                    {% csrf_token %}
+                                                                    <button value="Confirm" class="btn btn-info btn-sm">
+                                                                        Yes
+                                                                    </button>
+                                                                    <button class="btn btn-info btn-sm"
+                                                                            data-dismiss="modal">No
+                                                                    </button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        {% endfor %}
+                                        </tbody>
+                                    </table><!-- End .table table-wishlist -->
+
+                                    {#                                    <div class="cart-bottom">#}
+                                    {#                                        <div class="cart-discount">#}
+                                    {#                                            <form action="#">#}
+                                    {#                                                <div class="input-group">#}
+                                    {#                                                    <input type="text" class="form-control" required#}
+                                    {#                                                           placeholder="coupon code">#}
+                                    {#                                                    <div class="input-group-append">#}
+                                    {#                                                        <button class="btn btn-outline-primary-2" type="submit"><i#}
+                                    {#                                                                class="icon-long-arrow-right"></i></button>#}
+                                    {#                                                    </div><!-- .End .input-group-append -->#}
+                                    {#                                                </div><!-- End .input-group -->#}
+                                    {#                                            </form>#}
+                                    {#                                        </div><!-- End .cart-discount -->#}
+                                    {##}
+                                    {##}
+                                    {#                                    </div><!-- End .cart-bottom -->#}
+                                </div><!-- End .col-lg-9 -->
+                                <aside class="col-lg-3">
+                                    <div class="summary summary-cart">
+                                        <div>
+                                            <h3 class="summary-title">Cart Total</h3><!-- End .summary-title -->
+
+                                            <table class="table table-summary">
+                                                <tbody>
+                                                <tr class="summary-subtotal">
+                                                    <td>Subtotal:</td>
+                                                    <td>Rs.{{ cart.get_total_cost }}</td>
+                                                </tr><!-- End .summary-subtotal -->
+                                                <tr class="summary-subtotal">
+                                                    <td>Shipping Cost:</td>
+                                                    <td>Rs.100</td>
+                                                </tr><!-- End .summary-subtotal -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div>
+                                            <table class="table table-summary">
+                                                <tr class="summary-subtotal">
+                                                    <th class="text-dark"><b>Net Total</b></th>
+                                                    <td class="text-dark">Rs.
+                                                        <em><b>{{ cart.get_total_cost|add:100 }}</b></em></td>
+                                                </tr>
+                                            </table>
+                                        </div>
+
+                                        <div>
+                                                                                        <a href="{% url 'checkout' request.user.id %}"
+                                                                                           class="btn btn-outline-primary-2 btn-order btn-block text-dark">PROCEED
+                                                                                            TO CHECKOUT</a>
+
+
+                                        </div>
+                                    </div><!-- End .summary -->
+                                </aside><!-- End .col-lg-3 -->
+                            </div><!-- End .row -->
+                        </div><!-- End .container -->
+                    </div><!-- End .cart -->
+                </div><!-- End .page-content -->
+            {% else %}
+                <div class="text-dark">You don't have any products in the cart yet...</div>
+            {% endif %}
+        </main><!-- End .main -->
+    </div>
+
+{% endblock %}
+

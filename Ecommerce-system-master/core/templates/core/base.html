@@ -1,0 +1,148 @@
+{% load static %}
+{% load menu %}
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %} | AamaSansar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css"
+          integrity="sha384-jLKHWM3JRmfMU0A5x5AkjWkw/EYfGUAGagvnfryNV3F9VqM98XiIH7VBGVoxVSc7" crossorigin="anonymous">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+    <style>
+        .dropbtn {
+            color: rgb(27, 23, 23);
+            padding: 16px;
+            font-size: 16px;
+            border: none;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: rgb(56, 99, 56);
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: rgb(77, 155, 77);
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown:hover .dropbtn {
+            background-color: #3e8e41;
+        }
+
+        .icon {
+            width: 1em;
+            display: inline;
+            margin-right: 40px;
+            position: relative;
+            top: 0.15em;
+        }
+
+    </style>
+
+</head>
+
+<body>
+<nav class="max-w-10xl mx-auto py-4 px-6 flex items-center justify-between bg-green-800">
+    <div class="logo">
+        <a href="/" class="text-2xl text-white">AamaSansar</a>
+    </div>
+
+    <div class="serach">
+        <form method="get" action="{% url 'search' %}" class="flex items-center space-x-4">
+            {% csrf_token %}
+            <input type="search" name="query" placeholder="Search..." class="py-2 px-6 rounded-xl">
+            <button>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                     stroke="currentColor" class="w-6 h-6 text-white">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/>
+                </svg>
+
+            </button>
+        </form>
+    </div>
+
+    <div class="flex items-center space-x-5">
+        {% menu %}
+        {% if request.user.is_authenticated %}
+            {% if not request.user.is_superuser and not request.user.is_vendor %}
+                <a href="{% url 'cart_view' %}"
+                   class="flex space-x-3 py-2 px-4 rounded-xl text-white hover:bg-teal-900">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                         stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"/>
+                    </svg>
+                    <span>({{ cart|length }})</span> </a>
+
+            {% endif %}
+            <div class="dropdown">
+                <button class="dropbtn">
+                        <span class="py-2 px-4  rounded-xl text-white hover:bg-teal-900">
+                          {% if request.user.is_superuser %}
+                              <a href="{% url 'dashboard:admin_index' %}">{{ request.user.username }}</a>
+                          {% elif request.user.is_vendor %}
+                              <a href="{% url 'seller' request.user.id %}">{{ request.user.username }}</a>
+                          {% else %}
+                              <a href="{% url 'frontpage' %}">{{ request.user.username }}</a>
+                          {% endif %}</span>
+                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                        <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                        <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
+                    </svg>
+                    </a>
+                </button>
+                <div class="dropdown-content">
+                    <a href="{% if request.user.is_vendor %}{% url 'vendor_detail' request.user.id %}{% endif %}">
+                        <span class="py-2 px-4  rounded-xl text-white hover:bg-teal-900">Profile</span>
+                    </a>
+                    <a href="{% url 'logout' %}">
+                        <span class="py-2 px-4  rounded-xl text-white hover:bg-teal-900">Log Out</span>
+                    </a>
+                </div>
+            </div>
+
+        {% else %}
+            <a href="{% url 'login' %}" class="py-2 px-4  rounded-xl text-white hover:bg-teal-900">Login</a>
+            <!-- <a href="{% url 'signup' %}" class="py-2 px-4  rounded-xl text-white hover:bg-teal-900">Register</a> -->
+
+            <a href="{% url 'handlesellersignup' %}"
+               class="py-2 px-4  rounded-xl text-white hover:bg-teal-900">Vendor</a>
+        {% endif %}
+
+
+    </div>
+</nav>
+<div class="max-w-6xl mx-auto py-6 px-2">
+    {% block content %}
+    {% endblock %}
+</div>
+</body>
+</html>

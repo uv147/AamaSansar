@@ -1,0 +1,267 @@
+{% extends '_dashboard.html' %}
+{% load static %}
+{% block dashboard_content %}
+    {#    <script>#}
+    {#        window.onload = function () {#}
+    {#            var chart = new CanvasJS.Chart("chartContainer", {#}
+    {#                theme: "light2",#}
+    {#                animationEnabled: true,#}
+    {#                exportEnabled: true,#}
+    {#                title: {#}
+    {#                    text: "Verified & Un-verified \u2800Vendors",#}
+    {#                    dockInsidePlotArea: true,#}
+    {#                    verticalAlign: "center",#}
+    {#                    maxWidth: 140,#}
+    {#                    fontSize: 18#}
+    {#                },#}
+    {#                data: [{#}
+    {#                    type: "doughnut",#}
+    {#                    indexLabel: "{label} - {y}",#}
+    {#                    yValueFormatString: "#,##0.0\"%\"",#}
+    {#                    startAngle: 0,#}
+    {#                    dataPoints: {{ vendor_data|safe }}#}
+    {#                }]#}
+    {#            });#}
+    {##}
+    {#            var barchart = new CanvasJS.Chart("barchartContainer", {#}
+    {#                theme: "light2",#}
+    {#                animationEnabled: true,#}
+    {#                exportEnabled: true,#}
+    {#                title: {#}
+    {#                    text: "Transaction Overview"#}
+    {#                },#}
+    {#                subtitles: [{#}
+    {#                    text: "Top 10 Vendors Transaction (in Nepalese Rupee)"#}
+    {#                }],#}
+    {#                axisY2: [{#}
+    {#suffix: " ¢/kWh",#}
+    {#prefix: "Rs. ",#}
+    {#                    labelAngle: 0,#}
+    {#                    labelMaxWidth: 150,#}
+    {#                    lineThickness: 1#}
+    {#                }],#}
+    {#                axisX: {#}
+    {#                    reversed: true,#}
+    {#                    labelAutoFit : true#}
+    {#                },#}
+    {#                data: [{#}
+    {#                    type: "bar",#}
+    {#                    yValueFormatString: "#.00",#}
+    {#                    axisYType: "secondary",#}
+    {#                    dataPoints: {{ top_10_vendor_transaction_data|safe }}#}
+    {#                }]#}
+    {#            });#}
+    {#            chart.render();#}
+    {#            barchart.render();#}
+    {#        }#}
+    {#    </script>#}
+
+    <script src="https://cdn.canvasjs.com/ga/canvasjs.min.js"></script>
+    <script>
+        window.onload = function () {
+            var chart = new CanvasJS.Chart("chartContainer", {
+                theme: "light2",
+                animationEnabled: true,
+                title: {
+                    text: "Verified & Un-verified Vendors"
+                },
+                data: [{
+                    type: "pie",
+                    startAngle: -90,
+                    yValueFormatString: "#,###'%'",
+                    dataPoints: {{ vendor_data|safe }}
+                }]
+            });
+            chart.render();
+
+
+            var chart = new CanvasJS.Chart("barchartContainer", {
+                animationEnabled: true,
+                exportEnabled: true,
+                title: {
+                    text: "Transaction Overview",
+                    fontFamily: "Verdana, sans-serif"
+                },
+                subtitles: [{
+                    text: "Top 10 Vendors Transaction (in Nepalese Rupee)",
+                    fontFamily: "Verdana, sans-serif"
+                }],
+                axisY: {
+                    title: "Total Earning",
+                    suffix: ""
+                },
+                axisX: {
+                    title: "Company Name",
+                    labelAngle: 0,
+                    labelTextAlign: "center"
+                },
+                data: [{
+                    type: "column",
+                    yValueFormatString: "#,##0",
+                    dataPoints: {{ top_10_vendor_transaction_data|safe }}
+                }]
+            });
+            chart.render();
+        }
+    </script>
+
+
+    <div class="container-fluid">
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+            {#            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i#}
+            {#                    class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>#}
+        </div>
+
+        <!-- Content Row -->
+        <div class="row">
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Product
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ product_count }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-warehouse fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    Vendor
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ vendor_count }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-people-carry fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    Order
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ order_count }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-wallet fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Pending Requests Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-warning shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                    Transaction
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    Rs. {{ total_transaction.total }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-money-bill-wave fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Row -->
+
+        <div class="row">
+
+            <!-- Area Chart -->
+            <div class="col-xl-8 col-lg-7">
+                <div class="card shadow mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div
+                            class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
+                        {##}
+                        {#                                                <div class="dropdown no-arrow">#}
+                        {#                                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"#}
+                        {#                                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
+                        {#                                                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>#}
+                        {#                                                    </a>#}
+                        {#                                                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"#}
+                        {#                                                         aria-labelledby="dropdownMenuLink">#}
+                        {#                                                        <div class="dropdown-header">Dropdown Header:</div>#}
+                        {#                                                        <a class="dropdown-item" href="#">Action</a>#}
+                        {#                                                        <a class="dropdown-item" href="#">Another action</a>#}
+                        {#                                                        <div class="dropdown-divider"></div>#}
+                        {#                                                        <a class="dropdown-item" href="#">Something else here</a>#}
+                        {#                                                    </div>#}
+                        {#                                                </div>#}
+                    </div>
+                    <!-- Card Body -->
+                    <div class="card-body">
+
+                        <div id="barchartContainer" style="width: 100%; height: 360px;"></div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pie Chart -->
+            <div class="col-xl-4 col-lg-5">
+                <div class="card shadow mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div
+                            class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Vendor Info</h6>
+                    </div>
+                    <!-- Card Body -->
+                    <div class="card-body">
+
+
+                        <div id="chartContainer" style="width: 100%; height: 360px;"></div>
+
+
+                        {#                        <div class="chart-pie pt-4 pb-2">#}
+                        {#                            <canvas id="myPieChart"></canvas>#}
+                        {#                        </div>#}
+                        {#                        <div class="mt-4 text-center small">#}
+                        {#                                        <span class="mr-2">#}
+                        {#                                            <i class="fas fa-circle text-primary"></i> Verified Vendor#}
+                        {#                                        </span>#}
+                        {#                            <span class="mr-2">#}
+                        {#                                            <i class="fas fa-circle text-success"></i> Un-Verified Vendor#}
+                        {#                                        </span>#}
+                        {#                        </div>#}
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'dashboard/vendor/canvasJs/canvasjs.min.js' %}"></script>
+{% endblock %}
